@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.selfOrder.OrdersDao">
+    <update id="batchUpdate">
+        update orders set overdue_status = 1 where id in
+        <foreach collection="upOrders" item="order" open="(" separator="," close=")">
+            #{order.id}
+        </foreach>
+    </update>
+    <update id="updateByOrderId">
+        update orders
+        <set>
+            <if test="consignee != null">
+                consignee = #{consignee,jdbcType=VARCHAR},
+            </if>
+            <if test="createAt != null">
+                create_at = #{createAt,jdbcType=VARCHAR},
+            </if>
+            <if test="descrition != null">
+                descrition = #{descrition,jdbcType=VARCHAR},
+            </if>
+            <if test="detail != null">
+                detail = #{detail,jdbcType=VARCHAR},
+            </if>
+            <if test="img != null">
+                img = #{img,jdbcType=VARCHAR},
+            </if>
+            <if test="mobile != null">
+                mobile = #{mobile,jdbcType=VARCHAR},
+            </if>
+            <if test="number != null">
+                number = #{number,jdbcType=INTEGER},
+            </if>
+            <if test="orderNum != null">
+                order_num = #{orderNum,jdbcType=VARCHAR},
+            </if>
+            <if test="payMoney != null">
+                pay_money = #{payMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="price != null">
+                price = #{price,jdbcType=DECIMAL},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=VARCHAR},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId,jdbcType=BIGINT},
+            </if>
+            <if test="finishTime != null">
+                finish_time = #{finishTime,jdbcType=VARCHAR},
+            </if>
+            <if test="payTime != null">
+                pay_time = #{payTime,jdbcType=VARCHAR},
+            </if>
+            <if test="payWay != null">
+                pay_way = #{payWay,jdbcType=INTEGER},
+            </if>
+            <if test="couponUserId != null">
+                coupon_user_id = #{couponUserId,jdbcType=BIGINT},
+            </if>
+            <if test="commissionPrice != null">
+                commission_price = #{commissionPrice,jdbcType=DECIMAL},
+            </if>
+            <if test="relationId != null">
+                relation_id = #{relationId,jdbcType=VARCHAR},
+            </if>
+            <if test="provinces != null">
+                provinces = #{provinces,jdbcType=VARCHAR},
+            </if>
+            <if test="expressName != null">
+                express_name = #{expressName,jdbcType=VARCHAR},
+            </if>
+            <if test="expressNumber != null">
+                express_number = #{expressNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="refund != null">
+                refund = #{refund,jdbcType=VARCHAR},
+            </if>
+            <if test="goodsId != null">
+                goods_id = #{goodsId,jdbcType=BIGINT},
+            </if>
+            <if test="isExpress != null">
+                is_express = #{isExpress,jdbcType=INTEGER},
+            </if>
+            <if test="isRefund != null">
+                is_refund = #{isRefund,jdbcType=INTEGER},
+            </if>
+            <if test="refusedRefund != null">
+                refused_refund = #{refusedRefund,jdbcType=VARCHAR},
+            </if>
+            <if test="skuId != null">
+                sku_id = #{skuId,jdbcType=BIGINT},
+            </if>
+            <if test="payNum != null">
+                pay_num = #{payNum,jdbcType=VARCHAR},
+            </if>
+            <if test="detailJson != null">
+                detail_json = #{detailJson,jdbcType=VARCHAR},
+            </if>
+            <if test="postagePrice != null">
+                postage_price = #{postagePrice,jdbcType=DECIMAL},
+            </if>
+            <if test="orderType != null">
+                order_type = #{orderType,jdbcType=INTEGER},
+            </if>
+            <if test="groupId != null">
+                group_id = #{groupId,jdbcType=BIGINT},
+            </if>
+            <if test="secKillId != null">
+                sec_kill_id = #{secKillId,jdbcType=BIGINT},
+            </if>
+            <if test="merchantId != null">
+                merchant_id = #{merchantId,jdbcType=BIGINT},
+            </if>
+            <if test="expressTime != null">
+                express_time = #{expressTime,jdbcType=VARCHAR},
+            </if>
+            <if test="couponMoney != null">
+                coupon_money = #{couponMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="virtualId != null">
+                virtual_id = #{virtualId,jdbcType=BIGINT},
+            </if>
+            <if test="storeId != null">
+                store_id = #{storeId,jdbcType=BIGINT},
+            </if>
+            <if test="storeName != null">
+                store_name = #{storeName,jdbcType=VARCHAR},
+            </if>
+            <if test="isRepeat != null">
+                is_repeat = #{isRepeat,jdbcType=INTEGER},
+            </if>
+            <if test="isCart != null">
+                is_cart = #{isCart,jdbcType=INTEGER},
+            </if>
+            <if test="dayId != null">
+                day_id = #{dayId,jdbcType=INTEGER},
+            </if>
+            <if test="oneMoney != null">
+                one_money = #{oneMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="oneUserId != null">
+                one_user_id = #{oneUserId,jdbcType=INTEGER},
+            </if>
+            <if test="twoMoney != null">
+                two_money = #{twoMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="twoUserId != null">
+                two_user_id = #{twoUserId,jdbcType=INTEGER},
+            </if>
+            <if test="leaseTerm != null">
+                lease_term = #{leaseTerm,jdbcType=VARCHAR},
+            </if>
+            <if test="deposit != null">
+                deposit = #{deposit,jdbcType=DECIMAL},
+            </if>
+            <if test="grossRent != null">
+                gross_rent = #{grossRent,jdbcType=DECIMAL},
+            </if>
+            <if test="continueDate != null">
+                continue_date = #{continueDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cancelTime != null">
+                cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="leaseStartDate != null">
+                lease_start_date = #{leaseStartDate,jdbcType=DATE},
+            </if>
+            <if test="returnDate != null">
+                return_date = #{returnDate,jdbcType=DATE},
+            </if>
+            <if test="estimateMoney != null">
+                estimate_money = #{estimateMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="dailyRent != null">
+                daily_rent = #{dailyRent,jdbcType=DECIMAL},
+            </if>
+            <if test="purchaseTime != null">
+                purchase_time = #{purchaseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="addressId != null">
+                address_id = #{addressId,jdbcType=INTEGER},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="returnTime != null">
+                return_time = #{returnTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="supplementMoney != null">
+                supplement_money = #{supplementMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="supplementStatus != null">
+                supplement_status = #{supplementStatus,jdbcType=INTEGER},
+            </if>
+            <if test="supplementTime != null">
+                supplement_time = #{supplementTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="supplementNum != null">
+                supplement_num = #{supplementNum,jdbcType=VARCHAR},
+            </if>
+            <if test="isEvaluate != null">
+                is_evaluate = #{isEvaluate,jdbcType=INTEGER},
+            </if>
+            <if test="totalContinueMoney != null">
+                total_continue_money = #{totalContinueMoney,jdbcType=DECIMAL},
+            </if>
+            <if test="sellerNumber != null">
+                seller_number = #{sellerNumber,jdbcType=VARCHAR},
+            </if>
+            <if test="deliveryTime != null">
+                delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="sendPhone != null">
+                send_phone = #{sendPhone,jdbcType=VARCHAR},
+            </if>
+            <if test="evaluationTime != null">
+                evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="overdueStatus != null">
+                overdue_status = #{overdueStatus,jdbcType=INTEGER},
+            </if>
+            <if test="buyoutPrice != null">
+                buyout_price = #{buyoutPrice,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where   id = #{id,jdbcType=BIGINT}
+    </update>
+
+
+    <select id="selectOrdersCountStatisticsByYear" resultType="java.lang.Integer">
+        select count(*) from orders
+        where 1=1
+        <if test="status!=null and status==3">
+            and status in (0,1,2,3,4,5,6,7,8,9,10)
+        </if>
+        <if test="flag!=null and flag==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+    <select id="selectAllCount" resultType="java.lang.Integer">
+        select count(*) from orders
+        where 1=1
+        <if test="classify!=null and classify==1">
+            and status in (0,1,2,3,4,5,6,7,8,9,10)
+        </if>
+        <if test="classify!=null and classify==2">
+            and status = 3
+        </if>
+        <if test="classify!=null and classify==3">
+            and status = 4
+        </if>
+        <if test="classify!=null and classify==4">
+            and status = 5
+        </if>
+        <if test="classify!=null and classify==5">
+            and status = 7
+        </if>
+        <if test="classify!=null and classify==6">
+            and status 8
+        </if>
+        <if test="classify!=null and classify==7">
+            and status = 6
+        </if>
+        <if test="type!=null and type==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{date},'%Y-%m-%d')
+        </if>
+        <if test="type!=null and type==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{date},'%Y-%m')
+        </if>
+        <if test="type!=null and type==3">
+            and date_format(create_at,'%Y')=date_format(#{date},'%Y')
+        </if>
+    </select>
+    <select id="selectPageByAll" resultType="com.sqx.domain.repository.entity.sys.Orders">
+         select o.id,o.consignee,o.create_at,
+        o.descrition,o.detail,o.img,
+        o.mobile,number,o.order_num,
+        o.pay_money,o.price,o.status,
+        o.type,o.user_id,
+        o.finish_time,o.pay_time,o.pay_way,
+        o.coupon_user_id,o.commission_price,o.relation_id,
+        o.provinces,o.express_name,o.express_number,
+        o.refund,o.goods_id,o.is_express,
+        o.is_refund,o.refused_refund,o.sku_id,
+        o.pay_num,o.detail_json,o.group_sku_id,
+        o.pink_id,o.seckill_id,o.pink_status,
+        o.postage_price,o.group_pink_id,o.order_type,
+        o.group_id,o.sec_kill_id,o.merchant_id,
+        o.express_time,o.coupon_money,o.virtual_id,
+        o.store_id,o.store_name,o.is_repeat,
+        o.is_cart,o.day_id,o.one_money,
+        o.one_user_id,o.two_money,o.two_user_id,
+        o.lease_term,o.deposit,o.gross_rent,
+        o.continue_date,o.cancel_time,o.lease_start_date,
+        o.return_date,o.estimate_money,o.daily_rent,
+        o.purchase_time,o.address_id,o.update_time,
+        o.return_time,o.supplement_money,o.supplement_status,
+        o.supplement_time,o.supplement_num,o.is_evaluate,o.total_continue_money,
+        o.seller_number,o.delivery_time,o.send_phone,o.evaluation_time,
+        o.overdue_status,o.buyout_price,g.title as title from orders o
+         left join goods g on o.goods_id=g.id
+         <where>
+             <if test="orderNum!=null and orderNum!=''">
+                 and o.order_num like concat('%',#{orderNum},'%')
+             </if>
+             <if test="status!=null and status!=''">
+                 and o.status=#{status}
+             </if>
+             <if test="title!=null and title!=''">
+                 and g.title like concat('%',#{title},'%')
+             </if>
+             <if test="mobile!=null and mobile!=''">
+                 and o.mobile like concat('%',#{mobile},'%')
+             </if>
+             <if test="storeId!=null and storeId!=''">
+                 and o.store_id=#{storeId}
+             </if>
+             <if test="isExpress!=null and isExpress!=''">
+                 and o.is_express=#{isExpress}
+             </if>
+             <if test="orderType!=null and orderType!=''">
+                 and o.order_type=#{orderType}
+             </if>
+             <if test="consignee!=null and consignee!=''">
+                 and o.consignee like concat('%',#{consignee},'%')
+             </if>
+             <if test="sellerNumber!=null and sellerNumber!=''">
+                 and o.seller_number like concat('%',#{sellerNumber},'%')
+             </if>
+             <if test="expressNumber!=null and expressNumber!=''">
+                 and o.express_number like concat('%',#{expressNumber},'%')
+             </if>
+             <if test="startTime!=null and startTime!=''">
+                 and o.create_at &gt;= #{startTime}
+             </if>
+             <if test="endTime!=null and endTime!=''">
+                 and o.create_at &lt;= #{endTime}
+             </if>
+         </where>
+         order by o.create_at desc
+    </select>
+</mapper>

@@ -1,0 +1,16 @@
+package com.sqx.domain.repository.service.app;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.sqx.domain.repository.entity.app.Msg;
+
+/**
+ * 验证码
+ *
+ */
+public interface MsgService extends IService<Msg> {
+
+	Msg findByPhone(String phone);
+
+	Msg findByPhoneAndCode(String phone, String msg);
+
+}

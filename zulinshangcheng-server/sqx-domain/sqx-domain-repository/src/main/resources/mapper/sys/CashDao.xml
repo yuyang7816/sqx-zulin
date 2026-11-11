@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sqx.domain.repository.mapper.cash.CashDao">
+
+    <select id="selectCashOutLimit3" resultType="com.sqx.domain.repository.entity.sys.CashOut">
+        select * from cash_out where state=1 order by out_at desc limit 3
+    </select>
+
+    <select id="selectCashOutSum" resultType="Double">
+        select sum(money) from cash_out where state in (0,1) and user_id=#{userId} and date_format(create_at,'%Y-%m-%d') between #{startTime} and #{endTime}
+    </select>
+
+    <select id="sumMoney" resultType="Double">
+        select sum(money) from cash_out where
+        <if test="flag!=null and flag==1">
+            date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+
+    <select id="countMoney" resultType="Integer">
+        select count(*) from cash_out where
+        <if test="flag!=null and flag==1">
+            date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+
+    <select id="stayMoney" resultType="Integer">
+        select count(*) from cash_out where
+        <if test="flag!=null and flag==1">
+            date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+        and state=0
+    </select>
+
+    <select id="selectMayMoney" resultType="Double">
+     select money from user_money  where  user_id=#{userId}
+    </select>
+    <select id="selectAdminHelpProfit" resultType="com.sqx.domain.repository.entity.sys.CashOut">
+        select c.*,u.phone from cash_out c,tb_user u where u.user_id = c.user_id
+        <if test="cashOut.zhifubao!=null and cashOut.zhifubao!=''">
+            and c.zhifubao like concat('%',#{cashOut.zhifubao},'%')
+        </if>
+        <if test="cashOut.zhifubaoName!=null and cashOut.zhifubaoName!=''">
+            and c.zhifubao_name like concat('%',#{cashOut.zhifubaoName},'%')
+        </if>
+        <if test="cashOut.phone!=null and cashOut.phone!=''">
+            and u.phone like concat('%',#{cashOut.phone},'%')
+        </if>
+        <if test="cashOut.classify!=null">
+            and c.classify = #{cashOut.classify}
+        </if>
+        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+            and date_format(c.create_at,'%Y-%m-%d') BETWEEN #{startTime} and #{endTime}
+        </if>
+        <if test="startTime!=null and startTime!='' and  (endTime==null or endTime=='')">
+            and date_format(c.create_at,'%Y-%m-%d') &gt;= #{startTime}
+        </if>
+        <if test="endTime!=null and endTime!='' and  (startTime==null or startTime=='')">
+            and date_format(c.create_at,'%Y-%m-%d') &lt;= #{endTime}
+        </if>
+        order by create_at desc
+    </select>
+    <select id="weiXinXCXMoney" resultType="java.lang.Integer">
+        select count(*) from cash_out where classify in (2,3)
+        <if test="flag!=null and flag==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and  date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+    <select id="zfbMoney" resultType="java.math.BigDecimal">
+        select sum(money) from cash_out where classify = 1 and state = 1
+        <if test="flag!=null and flag==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+       <if test="flag!=null and flag==3">
+           and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+       </if>
+    </select>
+    <select id="daiTXMoney" resultType="java.math.BigDecimal">
+        select sum(money) from cash_out where state=0
+        <if test="flag!=null and flag==1">
+           and date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+    <select id="yiTXMoney" resultType="java.math.BigDecimal">
+        select sum(money) from cash_out where state=1
+        <if test="flag!=null and flag==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+    <select id="weiXinMoney" resultType="java.math.BigDecimal">
+        select sum(money) from cash_out where state=1 and classify in (2,3)
+        <if test="flag!=null and flag==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+    <select id="refuseMoney" resultType="java.math.BigDecimal">
+        select sum(money) from cash_out where state= -1
+        <if test="flag!=null and flag==1">
+            and  date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+    <select id="yiTXCount" resultType="java.lang.Integer">
+        select count(*) from cash_out where state=1
+        <if test="flag!=null and flag==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+    <select id="zfbMoneyCount" resultType="java.lang.Integer">
+        select count(*) from cash_out where classify = 1
+        <if test="flag!=null and flag==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+    <select id="refuseMoneyCount" resultType="java.lang.Integer">
+        select count(*) from cash_out where state=-1
+        <if test="flag!=null and flag==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{time},'%Y-%m-%d')
+        </if>
+        <if test="flag!=null and flag==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{time},'%Y-%m')
+        </if>
+        <if test="flag!=null and flag==3">
+            and date_format(create_at,'%Y')=date_format(#{time},'%Y')
+        </if>
+    </select>
+
+    <update id="updateMayMoney">
+     update user_money  set
+        <if test="type==1">
+            money=money+#{money}
+        </if>
+        <if test="type==2">
+            money=money-#{money}
+        </if>
+        where user_id=#{userId}
+    </update>
+
+
+</mapper>

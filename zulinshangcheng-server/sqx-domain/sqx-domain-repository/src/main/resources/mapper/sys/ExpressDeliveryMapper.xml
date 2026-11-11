@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.expressDelivery.ExpressDeliveryDao">
+
+    <resultMap id="BaseResultMap" type="com.sqx.domain.repository.entity.sys.ExpressDelivery">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="expressName" column="express_name" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="parcelServices" column="parcel_services" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,express_name,create_time,
+        parcel_services
+    </sql>
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.selfOrder.ContinuingOrderDao">
+
+    <resultMap id="BaseResultMap" type="com.sqx.domain.repository.entity.app.ContinuingOrder">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="orderId" column="order_id" jdbcType="INTEGER"/>
+            <result property="startDate" column="start_date" jdbcType="TIMESTAMP"/>
+            <result property="endDate" column="end_date" jdbcType="TIMESTAMP"/>
+            <result property="leasePrice" column="lease_price" jdbcType="DECIMAL"/>
+            <result property="leaseDay" column="lease_day" jdbcType="VARCHAR"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="discountMoney" column="discount_money" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,order_id,start_date,
+        end_date,lease_price,lease_day,
+        remark,discount_money
+    </sql>
+</mapper>

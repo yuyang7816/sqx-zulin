@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.userCertification.UserCertificationDao">
+
+    <select id="getUserCertificationList" resultType="com.sqx.domain.repository.entity.app.UserCertification">
+        select uc.*,
+        ifnull(u.user_name, "用户不存在") as userName,
+        u.phone
+        from user_certification uc
+        left join tb_user u on uc.user_id = u.user_id
+        <where>
+            <if test="userCertification.userId!=null">
+                uc.user_id = #{userCertification.userId}
+            </if>
+            <if test="userCertification.realName!=null and userCertification.realName!=''">
+                and uc.real_name like concat('%',#{userCertification.realName},'%')
+            </if>
+            <if test="userCertification.idNumber!=null and userCertification.idNumber!=''">
+                and uc.id_number like concat('%',#{userCertification.idNumber},'%')
+            </if>
+            <if test="userCertification.phone!=null and userCertification.phone!=''">
+                and u.phone like concat('%',#{userCertification.phone},'%')
+            </if>
+            <if test="userCertification.userName!=null and userCertification.userName!=''">
+                and u.user_name like concat('%',#{userCertification.userName},'%')
+            </if>
+            <if test="userCertification.status!=null">
+                and uc.status = #{userCertification.status}
+            </if>
+        </where>
+        order by uc.create_time desc
+    </select>
+    <select id="aa" resultType="java.lang.Integer">
+        select * from user_certification u where u.status = #{userCertification.status}
+    </select>
+    <select id="selectByUserId" resultType="com.sqx.domain.repository.entity.app.UserCertification">
+        select * from user_certification u where u.user_id = #{userId}
+    </select>
+</mapper>

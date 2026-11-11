@@ -1,0 +1,14 @@
+@import "./_nf-scaffold-tokens.scss";
+
+// 站点主色 — 与 element-ui-theme/index.js 中 import 路径一致
+$--color-primary: $nf-brand;
+
+// Navbar
+$navbar--background-color: $nf-navbar-bg;
+
+// Sidebar（白底侧栏）
+$sidebar--background-color-dark: $nf-sidebar-bg;
+$sidebar--color-text-dark: $nf-text-regular;
+
+// Content
+$content--background-color: $nf-page-bg;

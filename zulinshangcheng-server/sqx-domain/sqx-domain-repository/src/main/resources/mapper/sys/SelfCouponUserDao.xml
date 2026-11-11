@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.selfCoupon.SelfCouponUserMapper">
+    <update id="updateCouponUserId">
+        update self_coupon_user set status = #{status} where coupon_user_id=#{couponUserId}
+    </update>
+
+    <select id="selectByCouponUserId" resultType="com.sqx.domain.repository.entity.sys.SelfCouponUser">
+        select * from self_coupon_user where coupon_user_id=#{couponUserId}
+    </select>
+</mapper>

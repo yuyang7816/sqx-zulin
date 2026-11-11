@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.sqx.domain.repository.mapper.app.UserDao">
+
+    <update id="updateMoney">
+        update tb_user
+        set balance=balance+#{money}
+        where user_id=#{userId}
+    </update>
+
+    <update id="updateReduceMoney">
+        update tb_user
+        set balance=balance-#{money}
+        where user_id=#{userId}
+    </update>
+
+
+    <select id="selectUserPage" resultType="com.sqx.domain.repository.entity.app.UserEntity">
+        select u.*,m.money from tb_user u
+        left join user_money m on m.user_id=u.user_id
+
+        where 1=1
+        <if test="userEntity.sex!=null">
+            and u.sex=#{userEntity.sex}
+        </if>
+        <if test="userEntity.isAdmin!=null">
+            and u.is_admin=#{userEntity.isAdmin}
+        </if>
+        <if test="userEntity.platform!=null and userEntity.platform!=''">
+            and u.platform=#{userEntity.platform}
+        </if>
+        <if test="userEntity.sysPhone!=null and userEntity.sysPhone!=''">
+            and u.sys_phone=#{userEntity.sysPhone}
+        </if>
+        <if test="userEntity.phone!=null and userEntity.phone!=''">
+            and u.phone like concat('%',#{userEntity.phone},'%')
+        </if>
+        <if test="userEntity.status!=null">
+            and u.status=#{userEntity.status}
+        </if>
+        <if test="userEntity.recycleStatus!=null">
+            and u.recycle_status=#{userEntity.recycleStatus}
+        </if>
+        <if test="startTime!=null and startTime!=''">
+            and date_format(u.create_time,'%Y-%m-%d')>=date_format(#{startTime},'%Y-%m-%d')
+        </if>
+        <if test="endTime!=null and endTime!=''">
+            and date_format(u.create_time,'%Y-%m-%d')&lt;=date_format(#{endTime},'%Y-%m-%d')
+        </if>
+        <if test="userEntity.userName!=null and userEntity.userName!=''">
+            and u.user_name like concat('%',#{userEntity.userName},'%')
+        </if>
+
+        order by u.create_time desc
+    </select>
+
+
+    <select id="queryInviterCount" resultType="int">
+        select count(*)
+        from tb_user
+        where inviter_code = #{inviterCode}
+    </select>
+    <select id="queryUserCount" resultType="int">
+        select count(*)from tb_user where 1=1
+        <if test="type==1">
+            and date_format(create_time,'%Y-%m-%d')=date_format(#{date},'%Y-%m-%d')
+        </if>
+        <if test="type==2">
+            and date_format(create_time,'%Y-%m')=date_format(#{date},'%Y-%m')
+        </if>
+        <if test="type==3">
+            and date_format(create_time,'%Y')=date_format(#{date},'%Y')
+        </if>
+
+    </select>
+    <select id="queryPayMoney" resultType="Double">
+        select ifnull(sum(money),0) from pay_details where `state`=1
+        <if test="type==1">
+            and date_format(create_time,'%Y-%m-%d')=date_format(#{date},'%Y-%m-%d')
+        </if>
+        <if test="type==2">
+            and date_format(create_time,'%Y-%m')=date_format(#{date},'%Y-%m')
+        </if>
+        <if test="type==3">
+            and date_format(create_time,'%Y')=date_format(#{date},'%Y')
+        </if>
+    </select>
+
+
+    <select id="userMessage" resultType="int">
+        select count(*) from tb_user t where 1=1
+        <if test="type==1">
+            and date_format(t.create_time,'%Y-%m-%d')=date_format(#{date},'%Y-%m-%d')
+        </if>
+        <if test="type==2">
+            and date_format(t.create_time,'%Y-%m')=date_format(#{date},'%Y-%m')
+        </if>
+        <if test="type==3">
+            and date_format(t.create_time,'%Y')=date_format(#{date},'%Y')
+        </if>
+    </select>
+
+    <select id="selectUserByUserId" resultType="com.sqx.domain.repository.entity.app.UserEntity">
+        select tu.*,uc.status as status1
+        from tb_user tu
+        left join user_certification uc on uc.user_id = tu.user_id
+        where tu.user_id = #{userId}
+    </select>
+    <select id="getUserIncomeList" resultType="java.util.HashMap">
+        select u.user_name as userName,
+        u.avatar as avatar,
+        u.user_id as userId,
+        (SELECT IFNULL(SUM(money),0) FROM `user_money_details` m WHERE m.relation_id = u.user_id
+        <if test="type==1">
+            AND m.user_level = 1
+        </if>
+        <if test="type==2">
+            AND m.user_level = 2
+        </if>
+        )AS money
+        FROM
+        tb_user u,
+        tb_user ua
+        WHERE 1 = 1
+        <if test="type==1">
+            and u.inviter_code = ua.invitation_code
+        </if>
+        <if test="type==2">
+            and u.inviter_inviter_code = ua.invitation_code
+        </if>
+        and ua.user_id = #{userId}
+        order by money desc
+    </select>
+    <select id="queryById" resultType="com.sqx.domain.repository.entity.app.vo.UserVO">
+        select u.*,
+               (select count(*) from sc_follow l where u.user_id = l.user_id and classify = 3) as followCount,
+               (select count(*) from sc_follow c where c.by_id = u.user_id and classify = 3) as fansCount,
+               (select count(*) from goods g where g.user_id = u.user_id and g.good_status = 0 and g.status = 1 and g.is_enable = 1) as goodsCount,
+               (select count(*) from trends t where t.user_id = u.user_id and t.status = 1) as trendsCount,
+               (select count(*) from trends_like l where t.trends_id = l.trends_id and l.comment_id is null) as likeCount,
+               (select count(*) from trends_comment c where c.trends_id = t.trends_id) as commentsCount,
+               (select case when exists(select 1 from trends_like l where t.trends_id = l.trends_id and l.user_id = #{userId} and l.comment_id is null)THEN 1 ELSE 0 END) AS isLike,
+               (SELECT CASE WHEN EXISTS(SELECT 1 FROM sc_follow f WHERE f.user_id = #{userId} AND f.by_id = u.user_id AND f.classify = 3)
+                                THEN 1 ELSE 0 END) as isFollow
+        from tb_user u
+                 LEFT JOIN trends t ON u.user_id = t.user_id
+        where u.user_id = #{byUserId}
+        GROUP BY u.user_id
+    </select>
+
+    <select id="queryWxUserNumber" resultType="java.lang.Integer">
+        select count(*) from tb_user where 1=1
+        and platform like concat('%',"小程序",'%')
+        <if test="type==1">
+            and date_format(create_time,'%Y-%m-%d')=date_format(#{date},'%Y-%m-%d')
+        </if>
+        <if test="type==2">
+            and date_format(create_time,'%Y-%m')=date_format(#{date},'%Y-%m')
+        </if>
+        <if test="type==3">
+            and date_format(create_time,'%Y')=date_format(#{date},'%Y')
+        </if>
+    </select>
+    <select id="queryAppUserNumber" resultType="java.lang.Integer">
+        select count(*) from tb_user where 1=1
+        and platform like concat('%',"app",'%')
+        <if test="type==1">
+            and date_format(create_time,'%Y-%m-%d')=date_format(#{date},'%Y-%m-%d')
+        </if>
+        <if test="type==2">
+            and date_format(create_time,'%Y-%m')=date_format(#{date},'%Y-%m')
+        </if>
+        <if test="type==3">
+            and date_format(create_time,'%Y')=date_format(#{date},'%Y')
+        </if>
+    </select>
+    <select id="queryH5UserNumber" resultType="java.lang.Integer">
+        select count(*) from tb_user where 1=1
+        and platform like concat('%',"H5",'%')
+        <if test="type==1">
+            and date_format(create_time,'%Y-%m-%d')=date_format(#{date},'%Y-%m-%d')
+        </if>
+        <if test="type==2">
+            and date_format(create_time,'%Y-%m')=date_format(#{date},'%Y-%m')
+        </if>
+        <if test="type==3">
+            and date_format(create_time,'%Y')=date_format(#{date},'%Y')
+        </if>
+    </select>
+    <select id="queryPublicUserNumber" resultType="java.lang.Integer">
+        select count(*) from tb_user where 1=1
+        and platform like concat('%',"公众号",'%')
+        <if test="type==1">
+            and date_format(create_time,'%Y-%m-%d')=date_format(#{date},'%Y-%m-%d')
+        </if>
+        <if test="type==2">
+            and date_format(create_time,'%Y-%m')=date_format(#{date},'%Y-%m')
+        </if>
+        <if test="type==3">
+            and date_format(create_time,'%Y')=date_format(#{date},'%Y')
+        </if>
+    </select>
+
+
+</mapper>

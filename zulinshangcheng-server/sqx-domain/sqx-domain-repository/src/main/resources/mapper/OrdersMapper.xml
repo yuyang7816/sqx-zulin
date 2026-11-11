@@ -1,0 +1,675 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="generator.mapper.OrdersMapper">
+
+    <resultMap id="BaseResultMap" type="generator.domain.Orders">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="consignee" column="consignee" jdbcType="VARCHAR"/>
+            <result property="createAt" column="create_at" jdbcType="VARCHAR"/>
+            <result property="descrition" column="descrition" jdbcType="VARCHAR"/>
+            <result property="detail" column="detail" jdbcType="VARCHAR"/>
+            <result property="img" column="img" jdbcType="VARCHAR"/>
+            <result property="mobile" column="mobile" jdbcType="VARCHAR"/>
+            <result property="number" column="number" jdbcType="INTEGER"/>
+            <result property="orderNum" column="order_num" jdbcType="VARCHAR"/>
+            <result property="payMoney" column="pay_money" jdbcType="DECIMAL"/>
+            <result property="price" column="price" jdbcType="DECIMAL"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+            <result property="title" column="title" jdbcType="VARCHAR"/>
+            <result property="type" column="type" jdbcType="VARCHAR"/>
+            <result property="userId" column="user_id" jdbcType="BIGINT"/>
+            <result property="finishTime" column="finish_time" jdbcType="VARCHAR"/>
+            <result property="payTime" column="pay_time" jdbcType="VARCHAR"/>
+            <result property="payWay" column="pay_way" jdbcType="INTEGER"/>
+            <result property="couponUserId" column="coupon_user_id" jdbcType="BIGINT"/>
+            <result property="commissionPrice" column="commission_price" jdbcType="DECIMAL"/>
+            <result property="relationId" column="relation_id" jdbcType="VARCHAR"/>
+            <result property="provinces" column="provinces" jdbcType="VARCHAR"/>
+            <result property="expressName" column="express_name" jdbcType="VARCHAR"/>
+            <result property="expressNumber" column="express_number" jdbcType="VARCHAR"/>
+            <result property="refund" column="refund" jdbcType="VARCHAR"/>
+            <result property="goodsId" column="goods_id" jdbcType="BIGINT"/>
+            <result property="isExpress" column="is_express" jdbcType="INTEGER"/>
+            <result property="isRefund" column="is_refund" jdbcType="INTEGER"/>
+            <result property="refusedRefund" column="refused_refund" jdbcType="VARCHAR"/>
+            <result property="skuId" column="sku_id" jdbcType="BIGINT"/>
+            <result property="payNum" column="pay_num" jdbcType="VARCHAR"/>
+            <result property="detailJson" column="detail_json" jdbcType="VARCHAR"/>
+            <result property="groupSkuId" column="group_sku_id" jdbcType="BIGINT"/>
+            <result property="pinkId" column="pink_id" jdbcType="BIGINT"/>
+            <result property="seckillId" column="seckill_id" jdbcType="BIGINT"/>
+            <result property="pinkStatus" column="pink_status" jdbcType="INTEGER"/>
+            <result property="postagePrice" column="postage_price" jdbcType="DECIMAL"/>
+            <result property="groupPinkId" column="group_pink_id" jdbcType="BIGINT"/>
+            <result property="orderType" column="order_type" jdbcType="INTEGER"/>
+            <result property="groupId" column="group_id" jdbcType="BIGINT"/>
+            <result property="secKillId" column="sec_kill_id" jdbcType="BIGINT"/>
+            <result property="merchantId" column="merchant_id" jdbcType="BIGINT"/>
+            <result property="expressTime" column="express_time" jdbcType="VARCHAR"/>
+            <result property="couponMoney" column="coupon_money" jdbcType="DECIMAL"/>
+            <result property="virtualId" column="virtual_id" jdbcType="BIGINT"/>
+            <result property="storeId" column="store_id" jdbcType="BIGINT"/>
+            <result property="storeName" column="store_name" jdbcType="VARCHAR"/>
+            <result property="isRepeat" column="is_repeat" jdbcType="INTEGER"/>
+            <result property="isCart" column="is_cart" jdbcType="INTEGER"/>
+            <result property="dayId" column="day_id" jdbcType="INTEGER"/>
+            <result property="oneMoney" column="one_money" jdbcType="DECIMAL"/>
+            <result property="oneUserId" column="one_user_id" jdbcType="INTEGER"/>
+            <result property="twoMoney" column="two_money" jdbcType="DECIMAL"/>
+            <result property="twoUserId" column="two_user_id" jdbcType="INTEGER"/>
+            <result property="leaseTerm" column="lease_term" jdbcType="VARCHAR"/>
+            <result property="deposit" column="deposit" jdbcType="DECIMAL"/>
+            <result property="grossRent" column="gross_rent" jdbcType="DECIMAL"/>
+            <result property="continueDate" column="continue_date" jdbcType="TIMESTAMP"/>
+            <result property="cancelTime" column="cancel_time" jdbcType="TIMESTAMP"/>
+            <result property="leaseStartDate" column="lease_start_date" jdbcType="DATE"/>
+            <result property="returnDate" column="return_date" jdbcType="DATE"/>
+            <result property="estimateMoney" column="estimate_money" jdbcType="DECIMAL"/>
+            <result property="dailyRent" column="daily_rent" jdbcType="DECIMAL"/>
+            <result property="purchaseTime" column="purchase_time" jdbcType="TIMESTAMP"/>
+            <result property="addressId" column="address_id" jdbcType="INTEGER"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="returnTime" column="return_time" jdbcType="TIMESTAMP"/>
+            <result property="supplementMoney" column="supplement_money" jdbcType="DECIMAL"/>
+            <result property="supplementStatus" column="supplement_status" jdbcType="INTEGER"/>
+            <result property="supplementTime" column="supplement_time" jdbcType="TIMESTAMP"/>
+            <result property="supplementNum" column="supplement_num" jdbcType="VARCHAR"/>
+            <result property="isEvaluate" column="is_evaluate" jdbcType="INTEGER"/>
+            <result property="totalContinueMoney" column="total_continue_money" jdbcType="DECIMAL"/>
+            <result property="sellerNumber" column="seller_number" jdbcType="VARCHAR"/>
+            <result property="deliveryTime" column="delivery_time" jdbcType="TIMESTAMP"/>
+            <result property="sendPhone" column="send_phone" jdbcType="VARCHAR"/>
+            <result property="evaluationTime" column="evaluation_time" jdbcType="TIMESTAMP"/>
+            <result property="overdueStatus" column="overdue_status" jdbcType="INTEGER"/>
+            <result property="buyoutPrice" column="buyout_price" jdbcType="DECIMAL"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,consignee,create_at,
+        descrition,detail,img,
+        mobile,number,order_num,
+        pay_money,price,status,
+        title,type,user_id,
+        finish_time,pay_time,pay_way,
+        coupon_user_id,commission_price,relation_id,
+        provinces,express_name,express_number,
+        refund,goods_id,is_express,
+        is_refund,refused_refund,sku_id,
+        pay_num,detail_json,group_sku_id,
+        pink_id,seckill_id,pink_status,
+        postage_price,group_pink_id,order_type,
+        group_id,sec_kill_id,merchant_id,
+        express_time,coupon_money,virtual_id,
+        store_id,store_name,is_repeat,
+        is_cart,day_id,one_money,
+        one_user_id,two_money,two_user_id,
+        lease_term,deposit,gross_rent,
+        continue_date,cancel_time,lease_start_date,
+        return_date,estimate_money,daily_rent,
+        purchase_time,address_id,update_time,
+        return_time,supplement_money,supplement_status,
+        supplement_time,supplement_num,is_evaluate,
+        total_continue_money,seller_number,delivery_time,
+        send_phone,evaluation_time,overdue_status,
+        buyout_price
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from orders
+        where  id = #{id,jdbcType=BIGINT} 
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from orders
+        where  id = #{id,jdbcType=BIGINT} 
+    </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="generator.domain.Orders" useGeneratedKeys="true">
+        insert into orders
+        ( id,consignee,create_at
+        ,descrition,detail,img
+        ,mobile,number,order_num
+        ,pay_money,price,status
+        ,title,type,user_id
+        ,finish_time,pay_time,pay_way
+        ,coupon_user_id,commission_price,relation_id
+        ,provinces,express_name,express_number
+        ,refund,goods_id,is_express
+        ,is_refund,refused_refund,sku_id
+        ,pay_num,detail_json,group_sku_id
+        ,pink_id,seckill_id,pink_status
+        ,postage_price,group_pink_id,order_type
+        ,group_id,sec_kill_id,merchant_id
+        ,express_time,coupon_money,virtual_id
+        ,store_id,store_name,is_repeat
+        ,is_cart,day_id,one_money
+        ,one_user_id,two_money,two_user_id
+        ,lease_term,deposit,gross_rent
+        ,continue_date,cancel_time,lease_start_date
+        ,return_date,estimate_money,daily_rent
+        ,purchase_time,address_id,update_time
+        ,return_time,supplement_money,supplement_status
+        ,supplement_time,supplement_num,is_evaluate
+        ,total_continue_money,seller_number,delivery_time
+        ,send_phone,evaluation_time,overdue_status
+        ,buyout_price)
+        values (#{id,jdbcType=BIGINT},#{consignee,jdbcType=VARCHAR},#{createAt,jdbcType=VARCHAR}
+        ,#{descrition,jdbcType=VARCHAR},#{detail,jdbcType=VARCHAR},#{img,jdbcType=VARCHAR}
+        ,#{mobile,jdbcType=VARCHAR},#{number,jdbcType=INTEGER},#{orderNum,jdbcType=VARCHAR}
+        ,#{payMoney,jdbcType=DECIMAL},#{price,jdbcType=DECIMAL},#{status,jdbcType=INTEGER}
+        ,#{title,jdbcType=VARCHAR},#{type,jdbcType=VARCHAR},#{userId,jdbcType=BIGINT}
+        ,#{finishTime,jdbcType=VARCHAR},#{payTime,jdbcType=VARCHAR},#{payWay,jdbcType=INTEGER}
+        ,#{couponUserId,jdbcType=BIGINT},#{commissionPrice,jdbcType=DECIMAL},#{relationId,jdbcType=VARCHAR}
+        ,#{provinces,jdbcType=VARCHAR},#{expressName,jdbcType=VARCHAR},#{expressNumber,jdbcType=VARCHAR}
+        ,#{refund,jdbcType=VARCHAR},#{goodsId,jdbcType=BIGINT},#{isExpress,jdbcType=INTEGER}
+        ,#{isRefund,jdbcType=INTEGER},#{refusedRefund,jdbcType=VARCHAR},#{skuId,jdbcType=BIGINT}
+        ,#{payNum,jdbcType=VARCHAR},#{detailJson,jdbcType=VARCHAR},#{groupSkuId,jdbcType=BIGINT}
+        ,#{pinkId,jdbcType=BIGINT},#{seckillId,jdbcType=BIGINT},#{pinkStatus,jdbcType=INTEGER}
+        ,#{postagePrice,jdbcType=DECIMAL},#{groupPinkId,jdbcType=BIGINT},#{orderType,jdbcType=INTEGER}
+        ,#{groupId,jdbcType=BIGINT},#{secKillId,jdbcType=BIGINT},#{merchantId,jdbcType=BIGINT}
+        ,#{expressTime,jdbcType=VARCHAR},#{couponMoney,jdbcType=DECIMAL},#{virtualId,jdbcType=BIGINT}
+        ,#{storeId,jdbcType=BIGINT},#{storeName,jdbcType=VARCHAR},#{isRepeat,jdbcType=INTEGER}
+        ,#{isCart,jdbcType=INTEGER},#{dayId,jdbcType=INTEGER},#{oneMoney,jdbcType=DECIMAL}
+        ,#{oneUserId,jdbcType=INTEGER},#{twoMoney,jdbcType=DECIMAL},#{twoUserId,jdbcType=INTEGER}
+        ,#{leaseTerm,jdbcType=VARCHAR},#{deposit,jdbcType=DECIMAL},#{grossRent,jdbcType=DECIMAL}
+        ,#{continueDate,jdbcType=TIMESTAMP},#{cancelTime,jdbcType=TIMESTAMP},#{leaseStartDate,jdbcType=DATE}
+        ,#{returnDate,jdbcType=DATE},#{estimateMoney,jdbcType=DECIMAL},#{dailyRent,jdbcType=DECIMAL}
+        ,#{purchaseTime,jdbcType=TIMESTAMP},#{addressId,jdbcType=INTEGER},#{updateTime,jdbcType=TIMESTAMP}
+        ,#{returnTime,jdbcType=TIMESTAMP},#{supplementMoney,jdbcType=DECIMAL},#{supplementStatus,jdbcType=INTEGER}
+        ,#{supplementTime,jdbcType=TIMESTAMP},#{supplementNum,jdbcType=VARCHAR},#{isEvaluate,jdbcType=INTEGER}
+        ,#{totalContinueMoney,jdbcType=DECIMAL},#{sellerNumber,jdbcType=VARCHAR},#{deliveryTime,jdbcType=TIMESTAMP}
+        ,#{sendPhone,jdbcType=VARCHAR},#{evaluationTime,jdbcType=TIMESTAMP},#{overdueStatus,jdbcType=INTEGER}
+        ,#{buyoutPrice,jdbcType=DECIMAL})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="generator.domain.Orders" useGeneratedKeys="true">
+        insert into orders
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="consignee != null">consignee,</if>
+                <if test="createAt != null">create_at,</if>
+                <if test="descrition != null">descrition,</if>
+                <if test="detail != null">detail,</if>
+                <if test="img != null">img,</if>
+                <if test="mobile != null">mobile,</if>
+                <if test="number != null">number,</if>
+                <if test="orderNum != null">order_num,</if>
+                <if test="payMoney != null">pay_money,</if>
+                <if test="price != null">price,</if>
+                <if test="status != null">status,</if>
+                <if test="title != null">title,</if>
+                <if test="type != null">type,</if>
+                <if test="userId != null">user_id,</if>
+                <if test="finishTime != null">finish_time,</if>
+                <if test="payTime != null">pay_time,</if>
+                <if test="payWay != null">pay_way,</if>
+                <if test="couponUserId != null">coupon_user_id,</if>
+                <if test="commissionPrice != null">commission_price,</if>
+                <if test="relationId != null">relation_id,</if>
+                <if test="provinces != null">provinces,</if>
+                <if test="expressName != null">express_name,</if>
+                <if test="expressNumber != null">express_number,</if>
+                <if test="refund != null">refund,</if>
+                <if test="goodsId != null">goods_id,</if>
+                <if test="isExpress != null">is_express,</if>
+                <if test="isRefund != null">is_refund,</if>
+                <if test="refusedRefund != null">refused_refund,</if>
+                <if test="skuId != null">sku_id,</if>
+                <if test="payNum != null">pay_num,</if>
+                <if test="detailJson != null">detail_json,</if>
+                <if test="groupSkuId != null">group_sku_id,</if>
+                <if test="pinkId != null">pink_id,</if>
+                <if test="seckillId != null">seckill_id,</if>
+                <if test="pinkStatus != null">pink_status,</if>
+                <if test="postagePrice != null">postage_price,</if>
+                <if test="groupPinkId != null">group_pink_id,</if>
+                <if test="orderType != null">order_type,</if>
+                <if test="groupId != null">group_id,</if>
+                <if test="secKillId != null">sec_kill_id,</if>
+                <if test="merchantId != null">merchant_id,</if>
+                <if test="expressTime != null">express_time,</if>
+                <if test="couponMoney != null">coupon_money,</if>
+                <if test="virtualId != null">virtual_id,</if>
+                <if test="storeId != null">store_id,</if>
+                <if test="storeName != null">store_name,</if>
+                <if test="isRepeat != null">is_repeat,</if>
+                <if test="isCart != null">is_cart,</if>
+                <if test="dayId != null">day_id,</if>
+                <if test="oneMoney != null">one_money,</if>
+                <if test="oneUserId != null">one_user_id,</if>
+                <if test="twoMoney != null">two_money,</if>
+                <if test="twoUserId != null">two_user_id,</if>
+                <if test="leaseTerm != null">lease_term,</if>
+                <if test="deposit != null">deposit,</if>
+                <if test="grossRent != null">gross_rent,</if>
+                <if test="continueDate != null">continue_date,</if>
+                <if test="cancelTime != null">cancel_time,</if>
+                <if test="leaseStartDate != null">lease_start_date,</if>
+                <if test="returnDate != null">return_date,</if>
+                <if test="estimateMoney != null">estimate_money,</if>
+                <if test="dailyRent != null">daily_rent,</if>
+                <if test="purchaseTime != null">purchase_time,</if>
+                <if test="addressId != null">address_id,</if>
+                <if test="updateTime != null">update_time,</if>
+                <if test="returnTime != null">return_time,</if>
+                <if test="supplementMoney != null">supplement_money,</if>
+                <if test="supplementStatus != null">supplement_status,</if>
+                <if test="supplementTime != null">supplement_time,</if>
+                <if test="supplementNum != null">supplement_num,</if>
+                <if test="isEvaluate != null">is_evaluate,</if>
+                <if test="totalContinueMoney != null">total_continue_money,</if>
+                <if test="sellerNumber != null">seller_number,</if>
+                <if test="deliveryTime != null">delivery_time,</if>
+                <if test="sendPhone != null">send_phone,</if>
+                <if test="evaluationTime != null">evaluation_time,</if>
+                <if test="overdueStatus != null">overdue_status,</if>
+                <if test="buyoutPrice != null">buyout_price,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=BIGINT},</if>
+                <if test="consignee != null">#{consignee,jdbcType=VARCHAR},</if>
+                <if test="createAt != null">#{createAt,jdbcType=VARCHAR},</if>
+                <if test="descrition != null">#{descrition,jdbcType=VARCHAR},</if>
+                <if test="detail != null">#{detail,jdbcType=VARCHAR},</if>
+                <if test="img != null">#{img,jdbcType=VARCHAR},</if>
+                <if test="mobile != null">#{mobile,jdbcType=VARCHAR},</if>
+                <if test="number != null">#{number,jdbcType=INTEGER},</if>
+                <if test="orderNum != null">#{orderNum,jdbcType=VARCHAR},</if>
+                <if test="payMoney != null">#{payMoney,jdbcType=DECIMAL},</if>
+                <if test="price != null">#{price,jdbcType=DECIMAL},</if>
+                <if test="status != null">#{status,jdbcType=INTEGER},</if>
+                <if test="title != null">#{title,jdbcType=VARCHAR},</if>
+                <if test="type != null">#{type,jdbcType=VARCHAR},</if>
+                <if test="userId != null">#{userId,jdbcType=BIGINT},</if>
+                <if test="finishTime != null">#{finishTime,jdbcType=VARCHAR},</if>
+                <if test="payTime != null">#{payTime,jdbcType=VARCHAR},</if>
+                <if test="payWay != null">#{payWay,jdbcType=INTEGER},</if>
+                <if test="couponUserId != null">#{couponUserId,jdbcType=BIGINT},</if>
+                <if test="commissionPrice != null">#{commissionPrice,jdbcType=DECIMAL},</if>
+                <if test="relationId != null">#{relationId,jdbcType=VARCHAR},</if>
+                <if test="provinces != null">#{provinces,jdbcType=VARCHAR},</if>
+                <if test="expressName != null">#{expressName,jdbcType=VARCHAR},</if>
+                <if test="expressNumber != null">#{expressNumber,jdbcType=VARCHAR},</if>
+                <if test="refund != null">#{refund,jdbcType=VARCHAR},</if>
+                <if test="goodsId != null">#{goodsId,jdbcType=BIGINT},</if>
+                <if test="isExpress != null">#{isExpress,jdbcType=INTEGER},</if>
+                <if test="isRefund != null">#{isRefund,jdbcType=INTEGER},</if>
+                <if test="refusedRefund != null">#{refusedRefund,jdbcType=VARCHAR},</if>
+                <if test="skuId != null">#{skuId,jdbcType=BIGINT},</if>
+                <if test="payNum != null">#{payNum,jdbcType=VARCHAR},</if>
+                <if test="detailJson != null">#{detailJson,jdbcType=VARCHAR},</if>
+                <if test="groupSkuId != null">#{groupSkuId,jdbcType=BIGINT},</if>
+                <if test="pinkId != null">#{pinkId,jdbcType=BIGINT},</if>
+                <if test="seckillId != null">#{seckillId,jdbcType=BIGINT},</if>
+                <if test="pinkStatus != null">#{pinkStatus,jdbcType=INTEGER},</if>
+                <if test="postagePrice != null">#{postagePrice,jdbcType=DECIMAL},</if>
+                <if test="groupPinkId != null">#{groupPinkId,jdbcType=BIGINT},</if>
+                <if test="orderType != null">#{orderType,jdbcType=INTEGER},</if>
+                <if test="groupId != null">#{groupId,jdbcType=BIGINT},</if>
+                <if test="secKillId != null">#{secKillId,jdbcType=BIGINT},</if>
+                <if test="merchantId != null">#{merchantId,jdbcType=BIGINT},</if>
+                <if test="expressTime != null">#{expressTime,jdbcType=VARCHAR},</if>
+                <if test="couponMoney != null">#{couponMoney,jdbcType=DECIMAL},</if>
+                <if test="virtualId != null">#{virtualId,jdbcType=BIGINT},</if>
+                <if test="storeId != null">#{storeId,jdbcType=BIGINT},</if>
+                <if test="storeName != null">#{storeName,jdbcType=VARCHAR},</if>
+                <if test="isRepeat != null">#{isRepeat,jdbcType=INTEGER},</if>
+                <if test="isCart != null">#{isCart,jdbcType=INTEGER},</if>
+                <if test="dayId != null">#{dayId,jdbcType=INTEGER},</if>
+                <if test="oneMoney != null">#{oneMoney,jdbcType=DECIMAL},</if>
+                <if test="oneUserId != null">#{oneUserId,jdbcType=INTEGER},</if>
+                <if test="twoMoney != null">#{twoMoney,jdbcType=DECIMAL},</if>
+                <if test="twoUserId != null">#{twoUserId,jdbcType=INTEGER},</if>
+                <if test="leaseTerm != null">#{leaseTerm,jdbcType=VARCHAR},</if>
+                <if test="deposit != null">#{deposit,jdbcType=DECIMAL},</if>
+                <if test="grossRent != null">#{grossRent,jdbcType=DECIMAL},</if>
+                <if test="continueDate != null">#{continueDate,jdbcType=TIMESTAMP},</if>
+                <if test="cancelTime != null">#{cancelTime,jdbcType=TIMESTAMP},</if>
+                <if test="leaseStartDate != null">#{leaseStartDate,jdbcType=DATE},</if>
+                <if test="returnDate != null">#{returnDate,jdbcType=DATE},</if>
+                <if test="estimateMoney != null">#{estimateMoney,jdbcType=DECIMAL},</if>
+                <if test="dailyRent != null">#{dailyRent,jdbcType=DECIMAL},</if>
+                <if test="purchaseTime != null">#{purchaseTime,jdbcType=TIMESTAMP},</if>
+                <if test="addressId != null">#{addressId,jdbcType=INTEGER},</if>
+                <if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+                <if test="returnTime != null">#{returnTime,jdbcType=TIMESTAMP},</if>
+                <if test="supplementMoney != null">#{supplementMoney,jdbcType=DECIMAL},</if>
+                <if test="supplementStatus != null">#{supplementStatus,jdbcType=INTEGER},</if>
+                <if test="supplementTime != null">#{supplementTime,jdbcType=TIMESTAMP},</if>
+                <if test="supplementNum != null">#{supplementNum,jdbcType=VARCHAR},</if>
+                <if test="isEvaluate != null">#{isEvaluate,jdbcType=INTEGER},</if>
+                <if test="totalContinueMoney != null">#{totalContinueMoney,jdbcType=DECIMAL},</if>
+                <if test="sellerNumber != null">#{sellerNumber,jdbcType=VARCHAR},</if>
+                <if test="deliveryTime != null">#{deliveryTime,jdbcType=TIMESTAMP},</if>
+                <if test="sendPhone != null">#{sendPhone,jdbcType=VARCHAR},</if>
+                <if test="evaluationTime != null">#{evaluationTime,jdbcType=TIMESTAMP},</if>
+                <if test="overdueStatus != null">#{overdueStatus,jdbcType=INTEGER},</if>
+                <if test="buyoutPrice != null">#{buyoutPrice,jdbcType=DECIMAL},</if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="generator.domain.Orders">
+        update orders
+        <set>
+                <if test="consignee != null">
+                    consignee = #{consignee,jdbcType=VARCHAR},
+                </if>
+                <if test="createAt != null">
+                    create_at = #{createAt,jdbcType=VARCHAR},
+                </if>
+                <if test="descrition != null">
+                    descrition = #{descrition,jdbcType=VARCHAR},
+                </if>
+                <if test="detail != null">
+                    detail = #{detail,jdbcType=VARCHAR},
+                </if>
+                <if test="img != null">
+                    img = #{img,jdbcType=VARCHAR},
+                </if>
+                <if test="mobile != null">
+                    mobile = #{mobile,jdbcType=VARCHAR},
+                </if>
+                <if test="number != null">
+                    number = #{number,jdbcType=INTEGER},
+                </if>
+                <if test="orderNum != null">
+                    order_num = #{orderNum,jdbcType=VARCHAR},
+                </if>
+                <if test="payMoney != null">
+                    pay_money = #{payMoney,jdbcType=DECIMAL},
+                </if>
+                <if test="price != null">
+                    price = #{price,jdbcType=DECIMAL},
+                </if>
+                <if test="status != null">
+                    status = #{status,jdbcType=INTEGER},
+                </if>
+                <if test="title != null">
+                    title = #{title,jdbcType=VARCHAR},
+                </if>
+                <if test="type != null">
+                    type = #{type,jdbcType=VARCHAR},
+                </if>
+                <if test="userId != null">
+                    user_id = #{userId,jdbcType=BIGINT},
+                </if>
+                <if test="finishTime != null">
+                    finish_time = #{finishTime,jdbcType=VARCHAR},
+                </if>
+                <if test="payTime != null">
+                    pay_time = #{payTime,jdbcType=VARCHAR},
+                </if>
+                <if test="payWay != null">
+                    pay_way = #{payWay,jdbcType=INTEGER},
+                </if>
+                <if test="couponUserId != null">
+                    coupon_user_id = #{couponUserId,jdbcType=BIGINT},
+                </if>
+                <if test="commissionPrice != null">
+                    commission_price = #{commissionPrice,jdbcType=DECIMAL},
+                </if>
+                <if test="relationId != null">
+                    relation_id = #{relationId,jdbcType=VARCHAR},
+                </if>
+                <if test="provinces != null">
+                    provinces = #{provinces,jdbcType=VARCHAR},
+                </if>
+                <if test="expressName != null">
+                    express_name = #{expressName,jdbcType=VARCHAR},
+                </if>
+                <if test="expressNumber != null">
+                    express_number = #{expressNumber,jdbcType=VARCHAR},
+                </if>
+                <if test="refund != null">
+                    refund = #{refund,jdbcType=VARCHAR},
+                </if>
+                <if test="goodsId != null">
+                    goods_id = #{goodsId,jdbcType=BIGINT},
+                </if>
+                <if test="isExpress != null">
+                    is_express = #{isExpress,jdbcType=INTEGER},
+                </if>
+                <if test="isRefund != null">
+                    is_refund = #{isRefund,jdbcType=INTEGER},
+                </if>
+                <if test="refusedRefund != null">
+                    refused_refund = #{refusedRefund,jdbcType=VARCHAR},
+                </if>
+                <if test="skuId != null">
+                    sku_id = #{skuId,jdbcType=BIGINT},
+                </if>
+                <if test="payNum != null">
+                    pay_num = #{payNum,jdbcType=VARCHAR},
+                </if>
+                <if test="detailJson != null">
+                    detail_json = #{detailJson,jdbcType=VARCHAR},
+                </if>
+                <if test="groupSkuId != null">
+                    group_sku_id = #{groupSkuId,jdbcType=BIGINT},
+                </if>
+                <if test="pinkId != null">
+                    pink_id = #{pinkId,jdbcType=BIGINT},
+                </if>
+                <if test="seckillId != null">
+                    seckill_id = #{seckillId,jdbcType=BIGINT},
+                </if>
+                <if test="pinkStatus != null">
+                    pink_status = #{pinkStatus,jdbcType=INTEGER},
+                </if>
+                <if test="postagePrice != null">
+                    postage_price = #{postagePrice,jdbcType=DECIMAL},
+                </if>
+                <if test="groupPinkId != null">
+                    group_pink_id = #{groupPinkId,jdbcType=BIGINT},
+                </if>
+                <if test="orderType != null">
+                    order_type = #{orderType,jdbcType=INTEGER},
+                </if>
+                <if test="groupId != null">
+                    group_id = #{groupId,jdbcType=BIGINT},
+                </if>
+                <if test="secKillId != null">
+                    sec_kill_id = #{secKillId,jdbcType=BIGINT},
+                </if>
+                <if test="merchantId != null">
+                    merchant_id = #{merchantId,jdbcType=BIGINT},
+                </if>
+                <if test="expressTime != null">
+                    express_time = #{expressTime,jdbcType=VARCHAR},
+                </if>
+                <if test="couponMoney != null">
+                    coupon_money = #{couponMoney,jdbcType=DECIMAL},
+                </if>
+                <if test="virtualId != null">
+                    virtual_id = #{virtualId,jdbcType=BIGINT},
+                </if>
+                <if test="storeId != null">
+                    store_id = #{storeId,jdbcType=BIGINT},
+                </if>
+                <if test="storeName != null">
+                    store_name = #{storeName,jdbcType=VARCHAR},
+                </if>
+                <if test="isRepeat != null">
+                    is_repeat = #{isRepeat,jdbcType=INTEGER},
+                </if>
+                <if test="isCart != null">
+                    is_cart = #{isCart,jdbcType=INTEGER},
+                </if>
+                <if test="dayId != null">
+                    day_id = #{dayId,jdbcType=INTEGER},
+                </if>
+                <if test="oneMoney != null">
+                    one_money = #{oneMoney,jdbcType=DECIMAL},
+                </if>
+                <if test="oneUserId != null">
+                    one_user_id = #{oneUserId,jdbcType=INTEGER},
+                </if>
+                <if test="twoMoney != null">
+                    two_money = #{twoMoney,jdbcType=DECIMAL},
+                </if>
+                <if test="twoUserId != null">
+                    two_user_id = #{twoUserId,jdbcType=INTEGER},
+                </if>
+                <if test="leaseTerm != null">
+                    lease_term = #{leaseTerm,jdbcType=VARCHAR},
+                </if>
+                <if test="deposit != null">
+                    deposit = #{deposit,jdbcType=DECIMAL},
+                </if>
+                <if test="grossRent != null">
+                    gross_rent = #{grossRent,jdbcType=DECIMAL},
+                </if>
+                <if test="continueDate != null">
+                    continue_date = #{continueDate,jdbcType=TIMESTAMP},
+                </if>
+                <if test="cancelTime != null">
+                    cancel_time = #{cancelTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="leaseStartDate != null">
+                    lease_start_date = #{leaseStartDate,jdbcType=DATE},
+                </if>
+                <if test="returnDate != null">
+                    return_date = #{returnDate,jdbcType=DATE},
+                </if>
+                <if test="estimateMoney != null">
+                    estimate_money = #{estimateMoney,jdbcType=DECIMAL},
+                </if>
+                <if test="dailyRent != null">
+                    daily_rent = #{dailyRent,jdbcType=DECIMAL},
+                </if>
+                <if test="purchaseTime != null">
+                    purchase_time = #{purchaseTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="addressId != null">
+                    address_id = #{addressId,jdbcType=INTEGER},
+                </if>
+                <if test="updateTime != null">
+                    update_time = #{updateTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="returnTime != null">
+                    return_time = #{returnTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="supplementMoney != null">
+                    supplement_money = #{supplementMoney,jdbcType=DECIMAL},
+                </if>
+                <if test="supplementStatus != null">
+                    supplement_status = #{supplementStatus,jdbcType=INTEGER},
+                </if>
+                <if test="supplementTime != null">
+                    supplement_time = #{supplementTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="supplementNum != null">
+                    supplement_num = #{supplementNum,jdbcType=VARCHAR},
+                </if>
+                <if test="isEvaluate != null">
+                    is_evaluate = #{isEvaluate,jdbcType=INTEGER},
+                </if>
+                <if test="totalContinueMoney != null">
+                    total_continue_money = #{totalContinueMoney,jdbcType=DECIMAL},
+                </if>
+                <if test="sellerNumber != null">
+                    seller_number = #{sellerNumber,jdbcType=VARCHAR},
+                </if>
+                <if test="deliveryTime != null">
+                    delivery_time = #{deliveryTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="sendPhone != null">
+                    send_phone = #{sendPhone,jdbcType=VARCHAR},
+                </if>
+                <if test="evaluationTime != null">
+                    evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
+                </if>
+                <if test="overdueStatus != null">
+                    overdue_status = #{overdueStatus,jdbcType=INTEGER},
+                </if>
+                <if test="buyoutPrice != null">
+                    buyout_price = #{buyoutPrice,jdbcType=DECIMAL},
+                </if>
+        </set>
+        where   id = #{id,jdbcType=BIGINT} 
+    </update>
+    <update id="updateByPrimaryKey" parameterType="generator.domain.Orders">
+        update orders
+        set 
+            consignee =  #{consignee,jdbcType=VARCHAR},
+            create_at =  #{createAt,jdbcType=VARCHAR},
+            descrition =  #{descrition,jdbcType=VARCHAR},
+            detail =  #{detail,jdbcType=VARCHAR},
+            img =  #{img,jdbcType=VARCHAR},
+            mobile =  #{mobile,jdbcType=VARCHAR},
+            number =  #{number,jdbcType=INTEGER},
+            order_num =  #{orderNum,jdbcType=VARCHAR},
+            pay_money =  #{payMoney,jdbcType=DECIMAL},
+            price =  #{price,jdbcType=DECIMAL},
+            status =  #{status,jdbcType=INTEGER},
+            title =  #{title,jdbcType=VARCHAR},
+            type =  #{type,jdbcType=VARCHAR},
+            user_id =  #{userId,jdbcType=BIGINT},
+            finish_time =  #{finishTime,jdbcType=VARCHAR},
+            pay_time =  #{payTime,jdbcType=VARCHAR},
+            pay_way =  #{payWay,jdbcType=INTEGER},
+            coupon_user_id =  #{couponUserId,jdbcType=BIGINT},
+            commission_price =  #{commissionPrice,jdbcType=DECIMAL},
+            relation_id =  #{relationId,jdbcType=VARCHAR},
+            provinces =  #{provinces,jdbcType=VARCHAR},
+            express_name =  #{expressName,jdbcType=VARCHAR},
+            express_number =  #{expressNumber,jdbcType=VARCHAR},
+            refund =  #{refund,jdbcType=VARCHAR},
+            goods_id =  #{goodsId,jdbcType=BIGINT},
+            is_express =  #{isExpress,jdbcType=INTEGER},
+            is_refund =  #{isRefund,jdbcType=INTEGER},
+            refused_refund =  #{refusedRefund,jdbcType=VARCHAR},
+            sku_id =  #{skuId,jdbcType=BIGINT},
+            pay_num =  #{payNum,jdbcType=VARCHAR},
+            detail_json =  #{detailJson,jdbcType=VARCHAR},
+            group_sku_id =  #{groupSkuId,jdbcType=BIGINT},
+            pink_id =  #{pinkId,jdbcType=BIGINT},
+            seckill_id =  #{seckillId,jdbcType=BIGINT},
+            pink_status =  #{pinkStatus,jdbcType=INTEGER},
+            postage_price =  #{postagePrice,jdbcType=DECIMAL},
+            group_pink_id =  #{groupPinkId,jdbcType=BIGINT},
+            order_type =  #{orderType,jdbcType=INTEGER},
+            group_id =  #{groupId,jdbcType=BIGINT},
+            sec_kill_id =  #{secKillId,jdbcType=BIGINT},
+            merchant_id =  #{merchantId,jdbcType=BIGINT},
+            express_time =  #{expressTime,jdbcType=VARCHAR},
+            coupon_money =  #{couponMoney,jdbcType=DECIMAL},
+            virtual_id =  #{virtualId,jdbcType=BIGINT},
+            store_id =  #{storeId,jdbcType=BIGINT},
+            store_name =  #{storeName,jdbcType=VARCHAR},
+            is_repeat =  #{isRepeat,jdbcType=INTEGER},
+            is_cart =  #{isCart,jdbcType=INTEGER},
+            day_id =  #{dayId,jdbcType=INTEGER},
+            one_money =  #{oneMoney,jdbcType=DECIMAL},
+            one_user_id =  #{oneUserId,jdbcType=INTEGER},
+            two_money =  #{twoMoney,jdbcType=DECIMAL},
+            two_user_id =  #{twoUserId,jdbcType=INTEGER},
+            lease_term =  #{leaseTerm,jdbcType=VARCHAR},
+            deposit =  #{deposit,jdbcType=DECIMAL},
+            gross_rent =  #{grossRent,jdbcType=DECIMAL},
+            continue_date =  #{continueDate,jdbcType=TIMESTAMP},
+            cancel_time =  #{cancelTime,jdbcType=TIMESTAMP},
+            lease_start_date =  #{leaseStartDate,jdbcType=DATE},
+            return_date =  #{returnDate,jdbcType=DATE},
+            estimate_money =  #{estimateMoney,jdbcType=DECIMAL},
+            daily_rent =  #{dailyRent,jdbcType=DECIMAL},
+            purchase_time =  #{purchaseTime,jdbcType=TIMESTAMP},
+            address_id =  #{addressId,jdbcType=INTEGER},
+            update_time =  #{updateTime,jdbcType=TIMESTAMP},
+            return_time =  #{returnTime,jdbcType=TIMESTAMP},
+            supplement_money =  #{supplementMoney,jdbcType=DECIMAL},
+            supplement_status =  #{supplementStatus,jdbcType=INTEGER},
+            supplement_time =  #{supplementTime,jdbcType=TIMESTAMP},
+            supplement_num =  #{supplementNum,jdbcType=VARCHAR},
+            is_evaluate =  #{isEvaluate,jdbcType=INTEGER},
+            total_continue_money =  #{totalContinueMoney,jdbcType=DECIMAL},
+            seller_number =  #{sellerNumber,jdbcType=VARCHAR},
+            delivery_time =  #{deliveryTime,jdbcType=TIMESTAMP},
+            send_phone =  #{sendPhone,jdbcType=VARCHAR},
+            evaluation_time =  #{evaluationTime,jdbcType=TIMESTAMP},
+            overdue_status =  #{overdueStatus,jdbcType=INTEGER},
+            buyout_price =  #{buyoutPrice,jdbcType=DECIMAL}
+        where   id = #{id,jdbcType=BIGINT} 
+    </update>
+</mapper>

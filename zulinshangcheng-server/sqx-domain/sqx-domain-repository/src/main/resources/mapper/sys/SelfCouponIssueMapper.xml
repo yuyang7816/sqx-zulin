@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.selfCoupon.SelfCouponIssueMapper">
+
+    <select id="selectByCouponIssueId" resultType="com.sqx.domain.repository.entity.sys.SelfCouponIssue">
+        select * from self_coupon_issue where coupon_issue_id = #{couponIssueId}
+    </select>
+</mapper>

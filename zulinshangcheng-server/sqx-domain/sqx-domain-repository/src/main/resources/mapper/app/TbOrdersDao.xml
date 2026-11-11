@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.app.TbOrdersDao">
+
+    <resultMap id="BaseResultMap" type="com.sqx.domain.repository.entity.app.TbOrders">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="consignee" column="consignee" jdbcType="VARCHAR"/>
+            <result property="phone" column="phone" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="remark" column="remark" jdbcType="VARCHAR"/>
+            <result property="userCouponsId" column="user_coupons_id" jdbcType="INTEGER"/>
+            <result property="couponMoney" column="coupon_money" jdbcType="DECIMAL"/>
+            <result property="addressId" column="address_id" jdbcType="INTEGER"/>
+            <result property="addressDetail" column="address_detail" jdbcType="VARCHAR"/>
+            <result property="goodsId" column="goods_id" jdbcType="INTEGER"/>
+            <result property="expressName" column="express_name" jdbcType="VARCHAR"/>
+            <result property="expressNumber" column="express_number" jdbcType="VARCHAR"/>
+            <result property="dayId" column="day_id" jdbcType="INTEGER"/>
+            <result property="payTime" column="pay_time" jdbcType="TIMESTAMP"/>
+            <result property="finishTime" column="finish_time" jdbcType="TIMESTAMP"/>
+            <result property="payWay" column="pay_way" jdbcType="INTEGER"/>
+            <result property="payStatus" column="pay_status" jdbcType="INTEGER"/>
+            <result property="oneMoney" column="one_money" jdbcType="DECIMAL"/>
+            <result property="oneUserId" column="one_user_id" jdbcType="INTEGER"/>
+            <result property="twoMoney" column="two_money" jdbcType="DECIMAL"/>
+            <result property="twoUserId" column="two_user_id" jdbcType="INTEGER"/>
+            <result property="specId" column="spec_id" jdbcType="INTEGER"/>
+            <result property="selectedSpec" column="selected_spec" jdbcType="VARCHAR"/>
+            <result property="payNum" column="pay_num" jdbcType="INTEGER"/>
+            <result property="leaseTerm" column="lease_term" jdbcType="VARCHAR"/>
+            <result property="freight" column="freight" jdbcType="DECIMAL"/>
+            <result property="deposit" column="deposit" jdbcType="DECIMAL"/>
+            <result property="orderNumber" column="order_number" jdbcType="VARCHAR"/>
+            <result property="grossRent" column="gross_rent" jdbcType="DECIMAL"/>
+            <result property="payMoney" column="pay_money" jdbcType="DECIMAL"/>
+            <result property="leaseStartDate" column="lease_start_date" jdbcType="TIMESTAMP"/>
+            <result property="returnDate" column="return_date" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,consignee,
+        phone,create_time,remark,
+        user_coupons_id,coupon_money,address_id,
+        address_detail,goods_id,express_name,
+        express_number,day_id,pay_time,
+        finish_time,pay_way,pay_status,
+        one_money,one_user_id,two_money,
+        two_user_id,spec_id,selected_spec,
+        pay_num,lease_term,freight,
+        deposit,order_number,gross_rent,
+        pay_money,lease_start_date,return_date
+    </sql>
+    <select id="selectByOrderId" resultType="com.sqx.domain.repository.entity.app.TbOrders">
+        select * from tb_orders where id = #{id}
+    </select>
+    <select id="queryPlatformMoney" resultType="java.math.BigDecimal">
+        select ifnull(sum(pay_money),0.00) from orders where 1=1
+        and status in (1,2,3,4,5,6,7,8,10)
+        <if test="type!=null and type==1">
+            and date_format(create_at,'%Y-%m-%d')=date_format(#{date},'%Y-%m-%d')
+        </if>
+        <if test="type!=null and type==2">
+            and date_format(create_at,'%Y-%m')=date_format(#{date},'%Y-%m')
+        </if>
+        <if test="type!=null and type==3">
+            and date_format(create_at,'%Y')=date_format(#{date},'%Y')
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.labelType.LabelTypeDao">
+
+
+    <select id="selectPageByType" resultType="com.sqx.domain.repository.entity.sys.LabelType">
+        select * from label_type
+        where 1=1
+        <if test="labelType.isRecovery!=null">
+            and is_recovery = #{labelType.isRecovery}
+        </if>
+        <if test="labelType.isEnable!=null">
+            and is_enable = #{labelType.isEnable}
+        </if>
+        <if test="labelType.isType!=null">
+            and is_type = #{labelType.isType}
+        </if>
+        <if test="labelType.label!=null and labelType.label!=''">
+            and label like concat('%',#{labelType.label},'%')
+        </if>
+            order by sort desc
+    </select>
+    <select id="selectLabelByIsRecovery" resultType="com.sqx.domain.repository.entity.sys.LabelType">
+        select *
+        from label_type
+        where label = #{label}
+          and is_recovery = 0 and is_type = 1
+    </select>
+    <select id="selectLabelByOrdinary" resultType="com.sqx.domain.repository.entity.sys.LabelType">
+        select *
+        from label_type
+        where label = #{label}
+          and is_recovery = 1 and is_type = 0
+    </select>
+</mapper>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.sys.BusinessDao">
+
+    <resultMap id="BaseResultMap" type="com.sqx.domain.repository.entity.app.Business">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="legalId" column="legal_id" jdbcType="INTEGER"/>
+            <result property="legalPerson" column="legal_person" jdbcType="VARCHAR"/>
+            <result property="legalNumber" column="legal_number" jdbcType="VARCHAR"/>
+            <result property="legalPhone" column="legal_phone" jdbcType="VARCHAR"/>
+            <result property="businessName" column="business_name" jdbcType="VARCHAR"/>
+            <result property="businessNumber" column="business_number" jdbcType="VARCHAR"/>
+            <result property="businessAddress" column="business_address" jdbcType="VARCHAR"/>
+            <result property="businesszImg" column="businessz_img" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="status" column="status" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,legal_id,legal_person,
+        legal_number,legal_phone,business_name,
+        business_number,business_address,businessz_img,
+        create_time,update_time,status
+    </sql>
+</mapper>

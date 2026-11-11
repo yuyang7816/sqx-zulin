@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.app.ChatContentDao">
+
+
+	<select id="selectChatContentPage" resultType="java.util.Map">
+        select c.chat_content_id as chatContentId, c.chat_conversation_id as chatConversationId,c.voice_length as
+        voiceLength,
+        c.user_id as userId,u.user_name as userName,u.avatar,c.content,c.message_type as messageType,
+        c.create_time as createTime,c.width,c.height,c.good_id as goodId,u.phone as phone
+        from chat_content c
+        left join tb_user u on u.user_id=c.user_id
+        where 1=1
+        <if test="chatConversationId != null and chatConversationId != ''">
+            and c.chat_conversation_id=#{chatConversationId}
+        </if>
+        <if test="content!=null and content!=''">
+            and c.content like CONCAT('%',#{content},'%')
+        </if>
+        <if test="isDelete!=null and isDelete != ''">
+            and c.is_delete is null
+        </if>
+        <if test="phone != null and phone != ''">
+            and u.phone like CONCAT('%',#{phone},'%')
+        </if>
+        <if test="startTime != null and startTime!=''">
+			and c.create_time &gt;= #{startTime}
+		</if>
+        <if test="endTime != null and endTime != ''">
+			and c.create_time &lt;= #{endTime}
+		</if>
+        <if test="userName != null and userName != ''">
+			and u.user_name like CONCAT('%',#{userName},'%')
+		</if>
+        order by c.create_time desc
+        <!--		SELECT
+                c.chat_content_id AS chatContentId,
+                c.chat_conversation_id AS chatConversationId,
+                c.voice_length AS voiceLength,
+                CASE
+                WHEN c.user_id = 45 THEN cc.focused_user_id
+                ELSE 45
+                END AS userId, - 如果是当前用户发送的消息，则显示对方的user_id；否则显示当前用户的user_id作为对方
+                CASE
+                WHEN c.user_id = 45 THEN u2.user_name
+                ELSE u1.user_name
+                END AS userName, - 如果是当前用户发送的消息，则显示对方的用户名；否则显示当前用户的用户名作为对方
+                c.content,
+                c.message_type AS messageType,
+                c.create_time AS createTime,
+                c.width,
+                c.height,
+                c.good_id AS goodId
+                FROM chat_content c
+                LEFT JOIN tb_user u1 ON u1.user_id = c.user_id - 获取实际发送者的用户信息
+                LEFT JOIN chat_conversation cc ON c.chat_conversation_id = cc.chat_conversation_id
+                LEFT JOIN tb_user u2 ON u2.user_id = cc.focused_user_id - 获取对方的用户信息
+                WHERE c.chat_conversation_id = 313
+                ORDER BY c.create_time DESC -->
+    </select>
+
+	<update id="updateChatContentStatusByUserIdAndChatId">
+		update chat_content set status=1,
+		                        good_id=#{goodId} where user_id!=#{userId} and chat_conversation_id=#{chatConversationId}
+	</update>
+	<update id="updateChatContentStatusByUserIdAndChatIds">
+		update chat_content set status=1,is_delete = 1 where chat_conversation_id=#{chatConversationId}
+	</update>
+
+	<select id="selectChatCount" resultType="Integer">
+		select count(*) from chat_content
+		where status=0 and user_id!=#{userId} and chat_conversation_id in
+			(select chat_conversation_id from chat_conversation where user_id=#{userId}
+		or focused_user_id=#{userId}  and is_delete is null)
+	</select>
+
+
+	<select id="selectChatContentCountByWx" resultType="java.util.Map">
+		select * from (
+		SELECT
+			c.user_id as userId,any_value(cc.user_id) as ccUserId,any_value(cc.focused_user_id) as ccFocusedUserId,count(*) as counts,
+		    c.chat_conversation_id as chatConversationId
+		FROM
+			chat_content c
+				LEFT JOIN chat_conversation cc on c.chat_conversation_id=cc.chat_conversation_id
+		WHERE
+			c.`status` = 0
+		  AND now()>= DATE_ADD( c.create_time, INTERVAL #{minute} MINUTE )
+		  AND ( cc.is_wx_msg IS NULL OR cc.is_wx_msg = 0 )
+		GROUP BY
+			c.user_id,c.chat_conversation_id
+					  ) a where counts>=#{counts}
+	</select>
+
+		<select id="selectChatContentCountByDx" resultType="java.util.Map">
+		select * from (
+						  SELECT
+							  c.user_id as userId,any_value(cc.user_id) as ccUserId,any_value(cc.focused_user_id) as ccFocusedUserId,count(*) as counts,
+							  c.chat_conversation_id as chatConversationId
+						  FROM
+							  chat_content c
+								  LEFT JOIN chat_conversation cc on c.chat_conversation_id=cc.chat_conversation_id
+						  WHERE
+							  c.`status` = 0
+							AND now()>= DATE_ADD( c.create_time, INTERVAL #{minute} MINUTE )
+							AND ( cc.is_send_msg IS NULL OR cc.is_send_msg = 0 )
+						  GROUP BY
+							  c.user_id,c.chat_conversation_id
+					  ) a where counts>=#{counts}
+	</select>
+	<select id="selectChatByChatId" resultType="com.sqx.domain.repository.entity.app.ChatContent">
+		select * from chat_content where chat_conversation_id=#{chatConversationId}
+	</select>
+	<select id="selectChatContentPageByData" resultType="java.util.Map">
+		select c.chat_content_id as chatContentId, c.chat_conversation_id as chatConversationId,c.voice_length as
+		voiceLength,
+		c.user_id as userId,u.user_name as userName,u.avatar,c.content,c.message_type as messageType,
+		c.create_time as createTime,c.width,c.height,c.good_id as goodId
+		from chat_content c
+		left join tb_user u on u.user_id=c.user_id
+		where c.chat_conversation_id=#{chatConversationId}
+
+		<if test="content!=null and content!=''">
+			and c.content like CONCAT('%',#{content},'%')
+		</if>
+		<if test="isDelete!=null">
+			and c.is_delete is null
+		</if>
+		order by c.create_time desc
+	</select>
+
+
+</mapper>

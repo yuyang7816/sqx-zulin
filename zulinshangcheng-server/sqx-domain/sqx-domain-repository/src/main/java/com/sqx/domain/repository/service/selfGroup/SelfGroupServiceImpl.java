@@ -1,0 +1,301 @@
+package com.sqx.domain.repository.service.selfGroup;
+
+import com.sqx.common.core.domain.Result;
+import com.sqx.common.core.domain.ResultUtil;
+import com.sqx.common.core.utils.DateUtils;
+import com.sqx.common.core.utils.SkuUtil;
+import com.sqx.domain.repository.entity.sys.*;
+import com.sqx.domain.repository.mapper.selfGoods.GoodsJpaRepository;
+import com.sqx.domain.repository.mapper.selfGroup.SelfGroupJpaRepository;
+import com.sqx.domain.repository.mapper.selfGroupSku.SelfGroupSkuJpaRepository;
+import com.sqx.domain.repository.service.selfGoods.GoodsService;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.stereotype.Service;
+
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class SelfGroupServiceImpl implements SelfGroupService {
+    @Autowired
+    private SelfGroupJpaRepository jpaRepository;
+    @Autowired
+    private GoodsJpaRepository goodsJpaRepository;
+    @Autowired
+    private GoodsService goodsService;
+    @Autowired
+    private SelfGroupSkuJpaRepository selfGroupSkuJpaRepository;
+
+    @Override
+    public Result findAll(Integer page, Integer size, String title) {
+        //根据时间排序
+        Pageable pageable = PageRequest.of(page, size, Sort.by(new Sort.Order(Sort.Direction.DESC, "createTime")));
+        //构造自定义查询条件
+        Specification<SelfGroup> queryCondition = new Specification<SelfGroup>() {
+            @Override
+            public Predicate toPredicate(Root<SelfGroup> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicateList = new ArrayList<>();
+                if (StringUtils.isNotEmpty(title)) {
+                    predicateList.add(criteriaBuilder.like(root.get("title"), "%"+title+"%"));
+                }
+                return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+            }
+        };
+        Page<SelfGroup> all = jpaRepository.findAll(queryCondition, pageable);
+        for (SelfGroup s : all.getContent()) {
+            if(s.getGoodsId()!=null){
+                Goods one = (Goods)goodsService.findOne(s.getGoodsId()).getData();
+                s.setGoods(one);
+            }
+        }
+        return ResultUtil.success(all);
+    }
+
+    @Override
+    public Result userList(Integer page, Integer size, String sort) {
+        Sort.Order order = new Sort.Order(Sort.Direction.DESC, sort);
+        if (sort.equals("price")){
+            order = new Sort.Order(Sort.Direction.ASC, sort);
+        }
+        Pageable pageable = PageRequest.of(page, size, Sort.by(order));
+        //构造自定义查询条件
+        Specification<SelfGroup> queryCondition = new Specification<SelfGroup>() {
+            @Override
+            public Predicate toPredicate(Root<SelfGroup> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+                List<Predicate> predicateList = new ArrayList<>();
+                String nowTime = DateUtils.createTime();
+                predicateList.add(criteriaBuilder.lessThan(root.get("startTime"), nowTime));
+                predicateList.add(criteriaBuilder.greaterThanOrEqualTo(root.get("endTime"), nowTime));
+                predicateList.add(criteriaBuilder.equal(root.get("status"), 1)); //上架
+                return criteriaBuilder.and(predicateList.toArray(new Predicate[predicateList.size()]));
+            }
+        };
+        Page<SelfGroup> all = jpaRepository.findAll(queryCondition, pageable);
+        List<SelfGroup> content = all.getContent();
+        for(SelfGroup selfGroup:content){
+            selfGroup.setSales(selfGroup.getGroupNumber());
+        }
+        return ResultUtil.success(all);
+    }
+
+    @Override
+    public Result saveBody(SelfGroup entity) {
+        entity.setCreateTime(DateUtils.createTime());
+        entity.setGroupNumber(0); //成团数量
+        SelfGroup save = jpaRepository.save(entity);
+        //保存拼团sku
+        List<SelfGroupSku> sku = entity.getSku();
+        for (SelfGroupSku s : sku) {
+            s.setGoodsId(entity.getGoodsId());
+            s.setGroupId(save.getId());
+        }
+        selfGroupSkuJpaRepository.saveAll(sku);
+        return ResultUtil.success(save);
+    }
+
+    @Override
+    public Result updateBody(SelfGroup entity) {
+        selfGroupSkuJpaRepository.saveAll(entity.getSku());
+        return ResultUtil.success(jpaRepository.save(entity));
+    }
+
+    @Override
+    public Result findOne(Long id) {
+        SelfGroup o = jpaRepository.findById(id).orElse(null);
+        o.setGoods((Goods)goodsService.findOne(o.getGoodsId()).getData());
+        o.setSku(selfGroupSkuJpaRepository.findAllByGroupId(o.getId()));
+        return ResultUtil.success(o);
+    }
+
+    @Override
+    public Result delete(Long id) {
+        jpaRepository.deleteById(id);
+        List<SelfGroupSku> sku = selfGroupSkuJpaRepository.findAllByGroupId(id);
+        selfGroupSkuJpaRepository.deleteAll(sku);
+        return ResultUtil.success();
+    }
+
+    @Override
+    public Result updateStatus(Long id) {
+        SelfGroup o = jpaRepository.findById(id).orElse(null);
+        if (o.getStatus() == 1){
+            o.setStatus(2);
+        }else {
+            o.setStatus(1);
+        }
+        return ResultUtil.success(jpaRepository.save(o));
+    }
+
+    @Override
+    public Result isFormatSku(Long goodsId) {
+        //1.获取商品规格值
+        Goods goods = (Goods)goodsService.findOne(goodsId).getData();
+        List<SelfGoodsAttrValue> attr = goods.getAttr().get(0).getAttrValue();
+        int attrSize = attr.size();
+        //2.准备返回值
+        Map<String, Object> map = new HashMap<>();
+        List<String> header = new ArrayList<>(); //表头
+        List<Map<String, Object>> value = new ArrayList<>(); //规格排列组合
+        //3.sku规格处理集合
+        List<List<String>> skuInputList = new ArrayList<>();
+        //4.循环规格值
+        for (int i = 0; i < attrSize; i++) {
+            //5.放入表头数据
+            header.add(attr.get(i).getValue());
+            //6.sku规格计算
+            String detail = attr.get(i).getDetail();
+            String[] split = detail.split(",");
+            List<String> skuList = new ArrayList<>();
+            for (int j = 0; j < split.length; j++) {
+                skuList.add(split[j]);
+            }
+            skuInputList.add(skuList);
+        }
+        //8.sku规格种类
+        List<List<String>> skuList = SkuUtil.skuSort(skuInputList); //计算规格种类
+        List<SelfGoodsSku> goodsSkuList = goods.getSku();
+        for (int i = 0; i < goodsSkuList.size(); i++) {
+            Map<String, Object> sku = new HashMap<>();
+            List<String> strings = skuList.get(i);
+            String[] arr = strings.toArray(new String[strings.size()]);
+            String json = "";
+            for (int j = 0; j < attrSize; j++) {
+                String arrString = arr[j];
+                sku.put("value"+j, arrString);
+                json += arrString+",";
+            }
+            SelfGoodsSku goodsSku = goodsSkuList.get(i);
+            json = json.substring(0, json.length()-1);
+            sku.put("json", json);
+            sku.put("detailJson", json);
+            sku.put("skuImg", goodsSku.getSkuImg());
+            sku.put("skuOriginalPrice", goodsSku.getSkuOriginalPrice());
+            sku.put("skuPrice", goodsSku.getSkuPrice());
+            sku.put("memberPrice", goodsSku.getMemberPrice());
+            sku.put("stock", goodsSku.getStock());
+            sku.put("sales", goodsSku.getSales());
+            sku.put("pinkPrice", goodsSku.getSkuPrice());
+            sku.put("pinkStock", goodsSku.getStock());
+            value.add(sku);
+        }
+        //表头
+        header.add("图片");
+        header.add("原价");
+        header.add("售价");
+        header.add("会员价");
+        header.add("库存");
+        header.add("销量");
+        header.add("拼团价格");
+        header.add("拼团库存");
+        header.add("操作");
+        //数据放入返回map
+        map.put("header", header);
+        map.put("value", value);
+        return ResultUtil.success(map);
+    }
+
+    @Override
+    public Result onlyFormatSku(Long goodsId) {
+        Goods goods = (Goods)goodsService.findOne(goodsId).getData();
+        SelfGoodsSku goodsSku = goods.getSku().get(0);
+        Map<String, Object> map = new HashMap<>();
+        List<String> header = new ArrayList<>(); //表头
+        //表头
+        header.add("图片");
+        header.add("原价");
+        header.add("售价");
+        header.add("会员价");
+        header.add("库存");
+        header.add("销量");
+        header.add("拼团价格");
+        header.add("拼团库存");
+        List<Map<String, Object>> value = new ArrayList<>(); //规格排列组合
+        Map<String, Object> sku = new HashMap<>();
+        sku.put("json", null);
+        sku.put("detailJson", null);
+        sku.put("skuImg", goodsSku.getSkuImg());
+        sku.put("skuOriginalPrice", goodsSku.getSkuOriginalPrice());
+        sku.put("skuPrice", goodsSku.getSkuPrice());
+        sku.put("memberPrice", goodsSku.getMemberPrice());
+        sku.put("stock", goodsSku.getStock());
+        sku.put("sales", goodsSku.getSales());
+        sku.put("pinkPrice", goodsSku.getSkuPrice());
+        sku.put("pinkStock", goodsSku.getStock());
+        value.add(sku);
+        //数据放入返回map
+        map.put("header", header);
+        map.put("value", value);
+        return ResultUtil.success(map);
+    }
+
+    @Override
+    public Result showSku(Long groupId) {
+        //1.准备返回值
+        Map<String, Object> map = new HashMap<>();
+        List<String> header = new ArrayList<>(); //表头
+        List<Map<String, Object>> value = new ArrayList<>(); //规格排列组合
+        //2.sku集合
+        List<SelfGroupSku> skuList = selfGroupSkuJpaRepository.findAllByGroupId(groupId);
+        SelfGroupSku selfGroupSku = skuList.get(0);
+        if (StringUtils.isNotEmpty(selfGroupSku.getDetailJson())){
+            String[] attr = selfGroupSku.getDetailJson().split(",");
+            int attrSize = attr.length;
+            if (attrSize > 0){
+                //4.循环规格值
+                for (int i = 0; i < attrSize; i++) {
+                    //5.放入表头数据
+                    header.add("属性"+(i+1));
+                }
+            }
+        }
+        //表头
+        header.add("图片");
+        header.add("原价");
+        header.add("售价");
+        header.add("会员价");
+        header.add("库存");
+        header.add("销量");
+        header.add("拼团价格");
+        header.add("拼团库存");
+        //5.sku数据放入
+        for (SelfGroupSku s : skuList) {
+            Map<String, Object> sku = new HashMap<>();
+            String detailJson = s.getDetailJson();
+            if (detailJson != null){
+                String[] split = detailJson.split(",");
+                for (int i = 0; i < split.length; i++) {
+                    sku.put("value"+i, split[i]);
+                }
+            }
+            sku.put("detailJson", detailJson);
+            sku.put("skuOriginalPrice", s.getSkuOriginalPrice());
+            sku.put("skuPrice", s.getSkuPrice());
+            sku.put("memberPrice", s.getMemberPrice());
+            sku.put("stock", s.getStock());
+            sku.put("sales", s.getSales());
+            sku.put("skuImg", s.getSkuImg());
+            sku.put("pinkPrice", s.getPinkPrice());
+            sku.put("pinkStock", s.getPinkStock());
+            sku.put("id", s.getId());
+            sku.put("groupId", s.getGroupId());
+            sku.put("goodsId", s.getGoodsId());
+            value.add(sku);
+        }
+        //数据放入返回map
+        map.put("header", header);
+        map.put("value", value);
+        return ResultUtil.success(map);
+    }
+}

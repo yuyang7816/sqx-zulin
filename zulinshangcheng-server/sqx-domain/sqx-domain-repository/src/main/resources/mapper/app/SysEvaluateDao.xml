@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.app.SysEvaluateDao">
+
+    <resultMap id="BaseResultMap" type="com.sqx.domain.repository.entity.app.SysEvaluate">
+            <id property="evaluateId" column="evaluate_id" jdbcType="INTEGER"/>
+            <result property="userId" column="user_id" jdbcType="INTEGER"/>
+            <result property="indentNumber" column="indent_number" jdbcType="VARCHAR"/>
+            <result property="evaluateMessage" column="evaluate_message" jdbcType="VARCHAR"/>
+            <result property="satisfactionFlag" column="satisfaction_flag" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="evaluateImg" column="evaluate_img" jdbcType="VARCHAR"/>
+            <result property="isDelete" column="is_delete" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        evaluate_id,user_id,indent_number,
+        evaluate_message,satisfaction_flag,create_time,
+        evaluate_img,is_delete
+    </sql>
+    <select id="getSysEvaluate" resultType="com.sqx.domain.repository.entity.app.SysEvaluate">
+        select
+        <include refid="Base_Column_List"/>
+        from sys_evaluate
+        where is_delete = 0 and indent_number = #{orderId}
+    </select>
+    <select id="getTbOrdersListByTurnover" resultType="com.sqx.domain.repository.entity.app.SysEvaluate">
+        select se1.evaluate_id,
+               se1.evaluate_message,
+               se1.create_time,
+               se1.evaluate_img,
+               se1.satisfaction_flag,
+               se1.user_id,
+               g.good_title as goodsTitle,tu.user_name as userName,tu.avatar as avatar
+        from sys_evaluate se1
+        LEFT JOIN tb_orders to1 ON se1.indent_number = to1.order_num
+        LEFT JOIN goods g on to1.good_id = g.good_id
+        LEFT JOIN tb_user tu on tu.user_id = to1.seller_id
+        where se1.is_delete = 0 and to1.retrieve_type = 0 and to1.is_evaluate = 1 and se1.feedback_status = 1
+        order by se1.create_time desc
+    </select>
+    <select id="selectListByUserId" resultType="com.sqx.domain.repository.entity.app.SysEvaluate">
+        select
+        se.*,
+        tu.avatar as avatar,
+        tu.user_name as userName
+        from sys_evaluate se
+        LEFT JOIN tb_orders to1 ON se.indent_number = to1.order_num
+        LEFT JOIN tb_user tu on se.user_id = tu.user_id
+        where se.is_delete = 0
+        and se.feedback_status = 1
+        and to1.is_evaluate = 1
+        and to1.order_number = #{params.indentNumber}
+        <if test="params.page != null and params.limit != null">
+            limit #{params.page},#{params.limit}
+        </if>
+    </select>
+    <select id="selectPageByEvaluateList" resultType="com.sqx.domain.repository.entity.app.SysEvaluate">
+        select
+        se.*,
+        g.title as title,tu.user_name as userName,tu.avatar as avatar
+        from sys_evaluate se
+        LEFT JOIN orders to1 ON se.indent_number = to1.order_num
+        LEFT JOIN goods g on to1.goods_id = g.id
+        LEFT JOIN tb_user tu on tu.user_id = se.user_id
+        where se.is_delete = 0
+          <if test="sysEvaluate.evaluateMessage != null and sysEvaluate.evaluateMessage != ''">
+            and se.evaluate_message like concat('%',#{sysEvaluate.evaluateMessage},'%')
+          </if>
+        <if test="sysEvaluate.satisfactionFlag != null and sysEvaluate.satisfactionFlag != ''">
+            and se.satisfaction_flag = #{sysEvaluate.satisfactionFlag}
+        </if>
+        <if test="sysEvaluate.userName != null and sysEvaluate.userName != ''">
+            and tu.user_name like concat('%',#{sysEvaluate.userName},'%')
+        </if>
+        <if test="sysEvaluate.goodsTitle != null and sysEvaluate.goodsTitle != ''">
+            and g.good_title like concat('%',#{sysEvaluate.goodsTitle},'%')
+        </if>
+        <if test="sysEvaluate.indentNumber != null and sysEvaluate.indentNumber != ''">
+            and se.indent_number like concat('%',#{sysEvaluate.indentNumber},'%')
+        </if>
+        order by se.create_time desc
+    </select>
+    <select id="selectPageByOrderEvaluateList" resultType="com.sqx.domain.repository.entity.app.SysEvaluate">
+        select
+        se.*,
+        g.title as title,tu.user_name as userName,tu.avatar as avatar
+        from sys_evaluate se
+        LEFT JOIN orders to1 ON se.indent_number = to1.order_num
+        LEFT JOIN goods g on to1.goods_id = g.id
+        LEFT JOIN tb_user tu on tu.user_id = se.user_id
+        where se.is_delete = 0
+        <if test="sysEvaluate.evaluateMessage != null and sysEvaluate.evaluateMessage != ''">
+            and se.evaluate_message like concat('%',#{sysEvaluate.evaluateMessage},'%')
+        </if>
+        <if test="sysEvaluate.satisfactionFlag != null and sysEvaluate.satisfactionFlag != ''">
+            and se.satisfaction_flag = #{sysEvaluate.satisfactionFlag}
+        </if>
+        <if test="sysEvaluate.goodId != null and sysEvaluate.goodId != ''">
+            and g.id = #{sysEvaluate.goodId}
+        </if>
+        <if test="sysEvaluate.userName != null and sysEvaluate.userName != ''">
+            and tu.user_name like concat('%',#{sysEvaluate.userName},'%')
+        </if>
+        <if test="sysEvaluate.goodsTitle != null and sysEvaluate.goodsTitle != ''">
+            and g.good_title like concat('%',#{sysEvaluate.goodsTitle},'%')
+        </if>
+        <if test="sysEvaluate.indentNumber != null and sysEvaluate.indentNumber != ''">
+            and se.indent_number like concat('%',#{sysEvaluate.indentNumber},'%')
+        </if>
+        order by se.create_time desc
+    </select>
+    <select id="selectListByIndentNumber" resultType="com.sqx.domain.repository.entity.app.SysEvaluate">
+        select
+        se.evaluate_id,se.user_id,se.indent_number,
+        se.evaluate_message,se.satisfaction_flag,se.create_time,
+        se.evaluate_img,se.is_delete,
+        tu.avatar as avatar,
+        tu.user_name as userName
+        from sys_evaluate se
+        LEFT JOIN tb_orders to1 ON se.indent_number = to1.order_num
+        LEFT JOIN tb_user tu on se.user_id = tu.user_id
+        LEFT JOIN tb_user tu1 on to1.buyer_id = tu1.user_id
+        where se.is_delete = 0
+        and se.feedback_status = 1
+        and to1.is_evaluate = 1
+        and se.recycle_status = 0
+        and se.user_id = #{params.userId}
+        and to1.seller_id = #{params.byUserId}
+        <if test="params.page != null and params.limit != null">
+            limit #{params.page},#{params.limit}
+        </if>
+    </select>
+    <select id="selectListByBuyUserId" resultType="com.sqx.domain.repository.entity.app.SysEvaluate">
+        select
+            se.evaluate_id,se.user_id,se.indent_number,
+            se.evaluate_message,se.satisfaction_flag,se.create_time,
+            se.evaluate_img,se.is_delete,
+            tu.avatar as avatar,
+            tu.user_name as userName
+        from sys_evaluate se
+                 LEFT JOIN tb_orders to1 ON se.indent_number = to1.order_num
+                 LEFT JOIN tb_user tu on se.user_id = tu.user_id
+        where se.is_delete = 0
+          and se.feedback_status = 1
+          and to1.is_evaluate = 1
+          and se.recycle_status = 0
+          and se.user_id = #{byUserId}
+    </select>
+    <select id="selectCountByUserId" resultType="java.lang.Integer">
+        select count(1) from sys_evaluate se
+        LEFT JOIN tb_orders to1 ON se.indent_number = to1.order_num
+        LEFT JOIN tb_user tu on se.user_id = tu.user_id
+        where se.is_delete = 0
+        and se.feedback_status = 1
+        and to1.is_evaluate = 1
+        and se.recycle_status = 0
+        and to1.seller_id = #{byUserId}
+        <if test="orderNumbers != null and orderNumbers.size() > 0">
+            AND se.indent_number IN
+            <foreach item="orderNumber" collection="orderNumbers" open="(" separator="," close=")">
+                #{orderNumber}
+            </foreach>
+        </if>
+    </select>
+    <select id="selectAllEvaluationsBySellerAndBuyers" resultType="com.sqx.domain.repository.entity.app.SysEvaluate">
+        SELECT
+        se.evaluate_id, se.user_id, se.indent_number,
+        se.evaluate_message, se.satisfaction_flag, se.create_time,
+        se.evaluate_img, se.is_delete,
+        tu.avatar as avatar,
+        tu.user_name as userName
+        FROM
+        sys_evaluate se
+        LEFT JOIN
+        tb_orders to1 ON se.indent_number = to1.order_num
+        LEFT JOIN
+        tb_user tu ON se.user_id = tu.user_id
+        WHERE
+        se.is_delete = 0
+        AND se.feedback_status = 1
+        AND to1.is_evaluate = 1
+        AND se.recycle_status = 0
+        AND to1.seller_id = #{params.byUserId}
+        <if test="params.userId != null and params.userId.size() > 0">
+            AND se.user_id IN
+            <foreach item="id" collection="params.userId" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        ORDER BY
+        se.create_time DESC
+        LIMIT #{params.limit} OFFSET #{params.page}
+    </select>
+    <select id="selectEvaluateListByRecycle" resultType="com.sqx.domain.repository.entity.app.SysEvaluate">
+        select
+        se.*,
+        g.good_title as goodsTitle,tu.user_name as userName,tu.avatar as avatar
+        from sys_evaluate se
+        LEFT JOIN tb_orders to1 ON se.indent_number = to1.order_num
+        LEFT JOIN goods g on to1.good_id = g.good_id
+        LEFT JOIN tb_user tu on tu.user_id = se.user_id
+        where se.is_delete = 0 and se.recycle_status = 1
+        <if test="sysEvaluate.evaluateMessage != null and sysEvaluate.evaluateMessage != ''">
+            and se.evaluate_message like concat('%',#{sysEvaluate.evaluateMessage},'%')
+        </if>
+        <if test="sysEvaluate.satisfactionFlag != null and sysEvaluate.satisfactionFlag != ''">
+            and se.satisfaction_flag = #{sysEvaluate.satisfactionFlag}
+        </if>
+        <if test="sysEvaluate.userName != null and sysEvaluate.userName != ''">
+            and tu.user_name like concat('%',#{sysEvaluate.userName},'%')
+        </if>
+        <if test="sysEvaluate.goodsTitle != null and sysEvaluate.goodsTitle != ''">
+            and g.good_title like concat('%',#{sysEvaluate.goodsTitle},'%')
+        </if>
+        <if test="sysEvaluate.indentNumber != null and sysEvaluate.indentNumber != ''">
+            and se.indent_number like concat('%',#{sysEvaluate.indentNumber},'%')
+        </if>
+        order by se.create_time desc
+    </select>
+</mapper>

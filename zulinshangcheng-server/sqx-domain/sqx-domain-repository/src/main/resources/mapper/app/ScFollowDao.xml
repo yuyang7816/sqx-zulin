@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.app.ScFollowDao">
+
+
+    <select id="getMyFollowCount" resultType="java.lang.Integer">
+        select count(1) from sc_follow where user_id = #{userId} and classify = 3
+    </select>
+    <select id="getMyFollowGoodsCount" resultType="java.lang.Integer">
+        select count(1) from sc_follow where user_id = #{userId} and classify = 1
+    </select>
+    <select id="getFollowGoodsList" resultType="com.sqx.domain.repository.entity.sys.Goods">
+        select s.*,
+        (select count(*) from sc_follow f where f.by_id = s.id and f.classify = 1) as needCount
+        from sc_follow sc
+        left join goods s on sc.by_id = s.id
+        where s.id is not null
+            and sc.user_id = #{userId}
+        <if test="follow.classify!=null">
+            and sc.classify = #{follow.classify}
+        </if>
+        order by sc.create_time desc
+    </select>
+    <select id="selectByUserId" resultType="com.sqx.domain.repository.entity.app.ScFollow">
+        SELECT tu.user_name as userName,tu.avatar as avatar,tu.create_time as createTimeStr
+        FROM sc_follow sf
+        left join tb_user tu on sf.by_id = tu.user_id
+        WHERE sf.user_id = #{userId} AND sf.classify = 3
+    </select>
+    <select id="selectByFanId" resultType="com.sqx.domain.repository.entity.app.ScFollow">
+        SELECT tu.user_name AS userName, tu.avatar AS avatar, tu.create_time AS createTimeStr,
+        CASE
+        WHEN m.user_id IS NOT NULL THEN 1
+        ELSE 0
+        END AS is_mutual_follow
+        FROM sc_follow AS f
+        LEFT JOIN sc_follow AS m ON f.user_id = m.by_id AND f.classify = 3 AND m.classify = 3
+        LEFT JOIN tb_user tu ON f.by_id = tu.user_id
+        WHERE f.by_id = #{userId}
+        AND f.classify = 3
+    </select>
+</mapper>

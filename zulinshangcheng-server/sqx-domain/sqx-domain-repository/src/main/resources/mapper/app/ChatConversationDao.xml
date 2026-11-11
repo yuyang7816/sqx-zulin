@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.app.ChatConversationDao">
+	<update id="updateByGoodId">
+		update chat_conversation set good_id=#{goodId} where chat_conversation_id=#{chatConversationId}
+	</update>
+
+
+	<select id="selectChatConversationPage" resultType="Map">
+<!--		select * from (-->
+<!--		select c.chat_conversation_id as chatConversationId,c.update_time as updateTime,c.good_id as goodId,-->
+<!--		       u2.user_id as userId,u2.user_name as userName,u2.avatar,u1.user_id as byUserId,u1.user_name as byUserName,u1.avatar as byAvatar,-->
+<!--		       (select content from chat_content cc where cc.chat_conversation_id=c.chat_conversation_id order by cc.create_time desc limit 1) as content,-->
+<!--		       (select create_time from chat_content cc where cc.chat_conversation_id=c.chat_conversation_id order by cc.create_time desc limit 1) as messageTime,-->
+<!--		       (select message_type from chat_content cc where cc.chat_conversation_id=c.chat_conversation_id order by cc.create_time desc limit 1) as messageType,-->
+<!--		       (select count(*) from chat_content cc where cc.chat_conversation_id=c.chat_conversation_id and user_id!=#{userId} and status=0) as contentCount-->
+<!--		from chat_conversation c-->
+<!--		left join tb_user u1 on u1.user_id=c.user_id-->
+<!--		left join tb_user u2 on u2.user_id=c.focused_user_id-->
+<!--		where u1.user_id is not null and u2.user_id is not null-->
+<!--		<if test="userId!=null">-->
+<!--			and (c.user_id=#{userId} or c.focused_user_id=#{userId})-->
+<!--		</if>-->
+<!--		<if test="focusedUserId!=null">-->
+<!--			and u2.user_id=#{focusedUserId}-->
+<!--		</if>-->
+<!--		<if test="nickName!=null and nickName!=''">-->
+<!--			and (u1.user_name like CONCAT('%',#{nickName},'%') or u2.user_name like CONCAT('%',#{nickName},'%') )-->
+<!--		</if>-->
+<!--		<if test="content!=null and content!=''">-->
+<!--			and c.chat_conversation_id in (select chat_conversation_id from chat_content where content like concat('%',#{content},'%'))-->
+<!--		</if>-->
+<!--			) a-->
+<!--		order by messageTime desc-->
+		select * from (
+		select
+		c.chat_conversation_id as chatConversationId,
+		c.update_time as updateTime,
+		c.good_id as goodId,
+		case
+		when c.user_id = #{userId} then u2.user_id
+		else c.user_id
+		end as userId, -- 发送方ID
+		case
+		when c.user_id = #{userId} then u2.user_name
+		else u1.user_name
+		end as userName, -- 发送方用户名
+		case
+		when c.user_id = #{userId} then u2.avatar
+		else u1.avatar
+		end as avatar, -- 发送方头像
+		case
+		when c.user_id = #{userId} then c.focused_user_id
+		else u2.user_id
+		end as byUserId, -- 接收方ID
+		case
+		when c.user_id = #{userId} then u1.user_name
+		else u2.user_name
+		end as byUserName, -- 接收方用户名
+		case
+		when c.user_id = #{userId} then u1.avatar
+		else u2.avatar
+		end as byAvatar, -- 接收方头像
+		(select content from chat_content cc where cc.chat_conversation_id=c.chat_conversation_id order by cc.create_time desc limit 1) as content,
+		(select create_time from chat_content cc where cc.chat_conversation_id=c.chat_conversation_id order by cc.create_time desc limit 1) as messageTime,
+		(select message_type from chat_content cc where cc.chat_conversation_id=c.chat_conversation_id order by cc.create_time desc limit 1) as messageType,
+		(select count(*) from chat_content cc where cc.chat_conversation_id=c.chat_conversation_id and user_id != #{userId} and status=0) as contentCount
+		from chat_conversation c
+		left join tb_user u1 on u1.user_id = c.user_id
+		left join tb_user u2 on u2.user_id = c.focused_user_id
+		where u1.user_id is not null and u2.user_id is not null
+		<if test="userId!=null">
+			and (c.user_id = #{userId} or c.focused_user_id = #{userId})
+		</if>
+		<if test="focusedUserId!=null">
+			and u2.user_id = #{focusedUserId}
+		</if>
+		<if test="nickName!=null and nickName!=''">
+			and (u1.user_name like CONCAT('%',#{nickName},'%') or u2.user_name like CONCAT('%',#{nickName},'%'))
+		</if>
+		<if test="content!=null and content!=''">
+			and c.chat_conversation_id in (select chat_conversation_id from chat_content where content like concat('%',#{content},'%'))
+		</if>
+		<if test="isDelete!=null">
+			and c.is_delete is null
+		</if>
+		<if test="phone != null and phone !=''">
+			and (u1.phone like CONCAT('%',#{phone},'%') or u2.phone like CONCAT('%',#{phone},'%'))
+		</if>
+		<if test="startTime != null and startTime != ''">
+			and c.create_time &gt;= #{startTime}
+		</if>
+		<if test="endTime != null and endTime != ''">
+			and c.create_time &lt;= #{endTime}
+		</if>
+		) a
+		order by messageTime desc
+	</select>
+
+	<insert id="insertChatConversation" useGeneratedKeys="true"  keyProperty="chatConversationId" parameterType="com.sqx.domain.repository.entity.app.ChatConversation">
+		INSERT INTO chat_conversation
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="null != userId and '' != userId">
+				user_id,
+			</if>
+			<if test="null != focusedUserId and '' != focusedUserId">
+				focused_user_id,
+			</if>
+			<if test="null != status and '' != status">
+				status,
+			</if>
+			<if test="null != createTime and '' != createTime">
+				create_time,
+			</if>
+			<if test="null != updateTime and '' != updateTime">
+				update_time,
+			</if>
+			<if test="null != remark and '' != remark">
+				remark
+			</if>
+		    <if test="null != goodId and '' != goodId">
+				good_id,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="null != userId and '' != userId">
+				#{userId},
+			</if>
+			<if test="null != focusedUserId and '' != focusedUserId">
+				#{focusedUserId},
+			</if>
+			<if test="null != status and '' != status">
+				#{status},
+			</if>
+			<if test="null != createTime and '' != createTime">
+				#{createTime},
+			</if>
+			<if test="null != updateTime and '' != updateTime">
+				#{updateTime},
+			</if>
+			<if test="null != remark and '' != remark">
+				#{remark},
+			</if>
+		    <if test="null != goodId and '' != goodId">
+				#{goodId}
+			</if>
+		</trim>
+	</insert>
+
+
+</mapper>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.sys.BrandTypeDao">
+
+    <resultMap id="BaseResultMap" type="com.sqx.domain.repository.entity.sys.BrandType">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="sectionId" column="section_id" jdbcType="INTEGER"/>
+            <result property="brandTypeName" column="brand_type_name" jdbcType="VARCHAR"/>
+            <result property="img" column="img" jdbcType="VARCHAR"/>
+            <result property="sort" column="sort" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="state" column="state" jdbcType="INTEGER"/>
+            <result property="classify" column="classify" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,section_id,brand_type_name,
+        img,sort,create_time,
+        state,classify
+    </sql>
+</mapper>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.sys.GoodsTypeDao">
+
+    <select id="findAllLevel1ByName" resultType="com.sqx.domain.repository.entity.sys.GoodsType">
+        select * from goods_type
+        where  parent_id = 0
+        <if test="name!=null and name != ''">
+            and name like concat('%',#{name},'%')
+        </if>
+    </select>
+    <select id="findAllTypesByName" resultType="com.sqx.domain.repository.entity.sys.GoodsType">
+        select * from goods_type
+        where  parent_id != 0
+        <if test="name!=null and name != ''">
+            and name like concat('%',#{name},'%')
+        </if>
+    </select>
+    <select id="findAllTypes" resultType="com.sqx.domain.repository.entity.sys.GoodsType">
+        select * from goods_type
+        where 1=1
+        <if test="name!=null and name != ''">
+            and name like concat('%',#{name},'%')
+        </if>
+    </select>
+
+</mapper>

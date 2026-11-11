@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sqx.domain.repository.mapper.sys.GoodsSpecificationsDao">
+
+    <resultMap id="BaseResultMap" type="com.sqx.domain.repository.entity.sys.GoodsSpecifications">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="goodId" column="good_id" jdbcType="INTEGER"/>
+            <result property="condition" column="condition" jdbcType="VARCHAR"/>
+            <result property="color" column="color" jdbcType="VARCHAR"/>
+            <result property="size" column="size" jdbcType="VARCHAR"/>
+            <result property="weight" column="weight" jdbcType="DECIMAL"/>
+            <result property="networkType" column="network_type" jdbcType="VARCHAR"/>
+            <result property="versionType" column="version_type" jdbcType="VARCHAR"/>
+            <result property="stockQuantity" column="stock_quantity" jdbcType="INTEGER"/>
+            <result property="rentalPrice" column="rental_price" jdbcType="DECIMAL"/>
+            <result property="deleteFlag" column="delete_flag" jdbcType="INTEGER"/>
+            <result property="createBy" column="create_by" jdbcType="INTEGER"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateBy" column="update_by" jdbcType="INTEGER"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,good_id,condition,
+        color,size,weight,
+        network_type,version_type,stock_quantity,
+        rental_price,delete_flag,create_by,
+        create_time,update_by,update_time
+    </sql>
+</mapper>
